@@ -32,6 +32,8 @@ $string['header_plantalentosuv'] = 'Talent Plan of the Universidad del Valle';
 $string['manage'] = 'Settings for the Plan Talentos Universidad del Valle plugin';
 $string['showinnavigation'] = 'Show in navigation';
 $string['showinnavigation_desc'] = 'When enabled, the site navigation will display a link to the Plan Talentos UV plugin';
+$string['categorycoursestotrack'] = 'Category ID';
+$string['categorycoursestotrack_desc'] = 'Id of the category to track.';
 
 // Capabilities.
 $string['plantalentosuv:viewreport'] = 'View report';

@@ -32,6 +32,8 @@ $string['header_plantalentosuv'] = 'Plan Talentos Universidad del Valle';
 $string['manage'] = 'Configuración para la extensión Plan Talentos Universidad del Valle';
 $string['showinnavigation'] = 'Mostrar en la navegación';
 $string['showinnavigation_desc'] = 'Cuando se habilita, la navegación del sitio mostrará un enlace a la extensión Plan Talentos UV';
+$string['categorycoursestotrack'] = 'ID de la categoría';
+$string['categorycoursestotrack_desc'] = 'ID de la categoría a monitorear.';
 
 // Capabilities.
 $string['plantalentosuv:viewreport'] = 'Ver reporte';
