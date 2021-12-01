@@ -39,11 +39,11 @@ if ($hassiteconfig) {
         ));
 
         $settingspage->add(new admin_setting_configtext(
-            'local_plantalentosuv/categorycoursestotrack',
-            new lang_string('categorycoursestotrack', 'local_plantalentosuv'),
-            new lang_string('categorycoursestotrack_desc', 'local_plantalentosuv'),
+            'local_plantalentosuv/cohorttotrack',
+            new lang_string('cohorttotrack', 'local_plantalentosuv'),
+            new lang_string('cohorttotrack_desc', 'local_plantalentosuv'),
             0,
-            PARAM_INT
+            PARAM_TEXT
         ));
     }
 
