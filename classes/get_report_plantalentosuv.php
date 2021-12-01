@@ -51,5 +51,35 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
      */
     public function execute() {
         global $CFG, $DB;
+
+        $timenow = time();
+        $starttime = microtime();
+
+        mtrace("Update cron started at: " . date('r', $timenow) . "\n");
+
+        // Traer los resultados de asistencias para usuarios con el rol estudiante para la cohorte X.
+        $cohortidnumber = get_config('local_plantalentosuv', 'categorycoursestotrack');
+        // Validate params.
+        $cohort = $DB->get_record('cohort', array('idnumber' => $cohortidnumber), '*', MUST_EXIST);
+        $cohortid = $cohort->id;
+
+        // Now security checks.
+        $context = \context::instance_by_id($cohort->contextid, MUST_EXIST);
+        if ($context->contextlevel != CONTEXT_COURSECAT and $context->contextlevel != CONTEXT_SYSTEM) {
+            throw new \invalid_parameter_exception('Invalid context');
+        }
+
+        $cohortmembers = $DB->get_records_sql("SELECT u.id FROM {user} u, {cohort_members} cm
+                WHERE u.id = cm.userid AND cm.cohortid = ?
+                ORDER BY lastname ASC, firstname ASC", array($cohort->id));
+        $members[] = array('cohortid' => $cohortid, 'userids' => array_keys($cohortmembers));
+
+        print_r($cohortmembers);
+
+        // Update courses process completed.
+        mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
+        mtrace('Memoria utilizada: ' . display_size(memory_get_usage()));
+        $difftime = microtime_diff($starttime, microtime());
+        mtrace("Tarea programada tardó " . $difftime . " segundos para finalizar.\n");
     }
 }
