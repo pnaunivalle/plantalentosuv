@@ -34,6 +34,8 @@ $string['showinnavigation'] = 'Show in navigation';
 $string['showinnavigation_desc'] = 'When enabled, the site navigation will display a link to the Plan Talentos UV plugin';
 $string['categorycoursestotrack'] = 'Category ID';
 $string['categorycoursestotrack_desc'] = 'Id of the category to track.';
+$string['cohorttotrack'] = 'ID number of cohort';
+$string['cohorttotrack_desc'] = 'ID number of cohort to track.';
 
 // Capabilities.
 $string['plantalentosuv:viewreport'] = 'View report';
