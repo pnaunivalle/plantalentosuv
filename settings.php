@@ -37,6 +37,14 @@ if ($hassiteconfig) {
             new lang_string('showinnavigation_desc', 'local_plantalentosuv'),
             1
         ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/categorycoursestotrack',
+            new lang_string('categorycoursestotrack', 'local_plantalentosuv'),
+            new lang_string('categorycoursestotrack_desc', 'local_plantalentosuv'),
+            0,
+            PARAM_INT
+        ));
     }
 
     $ADMIN->add('localplugins', $settingspage);
