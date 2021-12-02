@@ -22,18 +22,17 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace local_plantalentosuv;
-
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = [
     [
-        'classname' => '\local_plantalentosuv\task\get_report_plantalentosuv',
+        'classname' => 'local_plantalentosuv\task\get_report_plantalentosuv',
         'blocking' => 0,
         'minute' => '*',
         'hour' => '2',
         'day' => '*',
         'month' => '*',
-        'dayofweek' => '*'
+        'dayofweek' => '*',
+        'disabled' => 0
     ]
 ];
