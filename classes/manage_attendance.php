@@ -93,9 +93,13 @@ class manage_attendance {
                         $userattendance[$userid]['course-'.$attendance->courseid]['attendance-'.$attendance->attid] = array();
 
                         $attendancedata = array();
+                        $attendancedata['attendance_id'] = $attendance->attid;
+                        $attendancedata['attendance_name'] = $attendance->attname;
                         $attendancedata['all_sessions_summary'] = $summary->get_all_sessions_summary_for($userid);
 
-                        array_push($userattendance[$userid]['course-'.$attendance->courseid]['attendance-'.$attendance->attid], $attendancedata);
+                        array_push(
+                            $userattendance[$userid]['course-'.$attendance->courseid]['attendance-'.$attendance->attid],
+                            $attendancedata);
                     }
                 }
             }
