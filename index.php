@@ -17,9 +17,9 @@
 /**
  * Report view
  *
- * @package   local_plantalentosuv
+ * @package    local_plantalentosuv
  * @copyright  2021 Plan Talentos Universidad del Valle
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once('../../config.php');
@@ -28,12 +28,23 @@ require_login();
 
 $data = new \stdClass();
 
+$context = \context_system::instance();
+
 $PAGE->set_url(new moodle_url('/local/plantalentosuv/index.php'));
-$PAGE->set_context(context_system::instance());
+$PAGE->set_context($context);
 $PAGE->set_title(get_string('pluginname', 'local_plantalentosuv'));
 $PAGE->set_heading(get_string('header_plantalentosuv', 'local_plantalentosuv'));
 $PAGE->set_pagelayout('standard');
 
+$urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
+                                                        'local_plantalentosuv',
+                                                        'plantalentosuvarea',
+                                                        0,
+                                                        '/',
+                                                        'attendancereport_ptuv_1638491221.json',
+                                                        true);
+
 echo $OUTPUT->header();
+echo('<a href="'.$urltoattendancereport.'" target="_blank">Descargar</a>');
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
 echo $OUTPUT->footer();
