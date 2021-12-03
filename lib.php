@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
  * Insert a link to index.php on the site front page navigation menu.
  *
  * @param global_navigation $nav Node representing the front page in the navigation tree.
+ * @return void
  */
 function local_plantalentosuv_extend_navigation(global_navigation $root) {
 
@@ -48,3 +49,46 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
     }
 }
 
+/**
+ * Serves the forum attachments. Implements needed access control ;)
+ *
+ * @package  local_plantalentosuv
+ * @category files
+ * @param stdClass $course course object
+ * @param stdClass $cm course module object
+ * @param stdClass $context context object
+ * @param string $filearea file area
+ * @param array $args extra arguments
+ * @param bool $forcedownload whether or not force download
+ * @param array $options additional options affecting the file serving
+ * @return bool false if file not found, does not return if found - justsend the file
+ */
+function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+    if ($context->contextlevel != CONTEXT_SYSTEM) {
+        return false;
+    }
+
+    if ($filearea !== 'plantalentosuvarea') {
+        return false;
+    }
+
+    require_login();
+
+    if (!has_capability('local/plantalentosuv:viewreport', $context)) {
+        return false;
+    }
+
+    $itemid = 0;
+
+    $filename = array_pop($args);
+    $filepath = '/';
+
+    // Retrieve the file from the Files API.
+    $fs = get_file_storage();
+    $file = $fs->get_file($context->id, 'local_plantalentosuv', $filearea, $itemid, $filepath, $filename);
+    if (!$file) {
+        return false; // The file does not exist.
+    }
+
+    send_stored_file($file, 86400, 0, $forcedownload, $options);
+}
