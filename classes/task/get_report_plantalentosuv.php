@@ -64,11 +64,7 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $cohort = $DB->get_record('cohort', array('idnumber' => $cohortidnumber), '*', MUST_EXIST);
         $cohortid = $cohort->id;
 
-        // Now security checks.
-        $context = \context::instance_by_id($cohort->contextid, MUST_EXIST);
-        if ($context->contextlevel != CONTEXT_COURSECAT and $context->contextlevel != CONTEXT_SYSTEM) {
-            throw new \invalid_parameter_exception('Invalid context');
-        }
+        $context = \context_system::instance();
 
         $cohortmembers = $DB->get_records_sql("SELECT u.id, u.username, u.email, u.lastname, u.firstname
                                                 FROM {user} u, {cohort_members} cm
@@ -80,8 +76,23 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $managerattendance = new \local_plantalentosuv\manage_attendance();
 
         $userattendance = $managerattendance->get_attendance_users($members[0]['userids']);
+        $userattendancejson = json_encode($userattendance);
 
-        print_r($userattendance);
+        $filename = "attendancereport_ptuv_".time().".json";
+
+        $filestorage = get_file_storage();
+
+        // Prepare file record object.
+        $fileinfo = array(
+            'contextid' => $context->id,
+            'component' => 'local_plantalentosuv',
+            'filearea' => 'plantalentosuvarea',
+            'itemid' => 0,
+            'filepath' => '/',
+            'filename' => $filename);
+
+        // Create and storage file.
+        $filestorage->create_file_from_string($fileinfo, $userattendancejson);
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
