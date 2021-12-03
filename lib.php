@@ -54,8 +54,6 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
  *
  * @package  local_plantalentosuv
  * @category files
- * @param stdClass $course course object
- * @param stdClass $cm course module object
  * @param stdClass $context context object
  * @param string $filearea file area
  * @param array $args extra arguments
@@ -64,6 +62,7 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
  * @return bool false if file not found, does not return if found - justsend the file
  */
 function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+    require_login(null, false);
     if ($context->contextlevel != CONTEXT_SYSTEM) {
         return false;
     }
@@ -71,8 +70,6 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
     if ($filearea !== 'plantalentosuvarea') {
         return false;
     }
-
-    require_login();
 
     if (!has_capability('local/plantalentosuv:viewreport', $context)) {
         return false;
@@ -90,5 +87,5 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
         return false; // The file does not exist.
     }
 
-    send_stored_file($file, 86400, 0, $forcedownload, $options);
+    send_stored_file($file, 0, 0, $forcedownload, $options);
 }
