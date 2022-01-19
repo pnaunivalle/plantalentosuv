@@ -42,3 +42,7 @@ $string['plantalentosuv:viewreport'] = 'View report';
 
 // Tasks.
 $string['get_report_plantalentosuv'] = 'Get report Plan Talentos UV';
+
+// Index.
+$string['download_attendance_report'] = 'Download attendance report';
+$string['download_grade_report'] = 'Download grade report';
