@@ -34,7 +34,7 @@ $string['showinnavigation'] = 'Mostrar en la navegación';
 $string['showinnavigation_desc'] = 'Cuando se habilita, la navegación del sitio mostrará un enlace a la extensión Plan Talentos UV';
 $string['categorycoursestotrack'] = 'ID de la categoría';
 $string['categorycoursestotrack_desc'] = 'ID de la categoría a monitorear.';
-$string['cohorttotrack'] = 'Identificarod de la cohorte';
+$string['cohorttotrack'] = 'Identificador de la cohorte';
 $string['cohorttotrack_desc'] = 'Identificador de la cohorte a monitorear.';
 
 // Capabilities.
