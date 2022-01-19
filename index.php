@@ -44,7 +44,8 @@ $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         'attendancereport_ptuv_1638491221.json',
                                                         true);
 
+$data->urltoattendancereport = $urltoattendancereport;
+
 echo $OUTPUT->header();
-echo('<a href="'.$urltoattendancereport.'" target="_blank">Descargar</a>');
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
 echo $OUTPUT->footer();
