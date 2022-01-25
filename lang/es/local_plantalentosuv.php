@@ -36,6 +36,8 @@ $string['categorycoursestotrack'] = 'ID de la categoría';
 $string['categorycoursestotrack_desc'] = 'ID de la categoría a monitorear.';
 $string['cohorttotrack'] = 'Identificador de la cohorte';
 $string['cohorttotrack_desc'] = 'Identificador de la cohorte a monitorear.';
+$string['categorytotrack'] = 'Identificador de la categoría de cursos';
+$string['categorytotrack_desc'] = 'Identificador de la categoría de cursos a monitorear';
 
 // Capabilities.
 $string['plantalentosuv:viewreport'] = 'Ver reporte';
