@@ -45,6 +45,14 @@ if ($hassiteconfig) {
             0,
             PARAM_TEXT
         ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/categorytotrack',
+            new lang_string('categorytotrack', 'local_plantalentosuv'),
+            new lang_string('categorytotrack_desc', 'local_plantalentosuv'),
+            0,
+            PARAM_TEXT
+        ));
     }
 
     $ADMIN->add('localplugins', $settingspage);
