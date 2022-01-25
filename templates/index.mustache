@@ -22,9 +22,31 @@
 
     Example context (json):
     {
-
+        "urltoattendancereport" = "http://localhost/moodle/pluginfile.php/1/local_plantalentosuv..."
     }
 }}
 
-
-
+<div class="container">
+    <div class="row" id="row-icons-index">
+        <div class="col-6">
+            <a href="{{urltoattendancereport}}" target="_blank">
+                <div class="col-12 text-center">
+                    <img src="http://drive.google.com/uc?export=view&id=12W-J_so2r7v7E6lAL9beb8Hg2H6h4QhS" alt="Attendance icon">
+                </div>
+                <br>
+                <div class="col-12 text-center">
+                    <strong class="legend-icons-index">{{#str}}download_attendance_report, local_plantalentosuv{{/str}}</strong>
+                </div>
+            </a>
+        </div>
+        <div class="col-6">
+            <div class="col-12 text-center">
+                <img src="http://drive.google.com/uc?export=view&id=1p3DvrL1DJ7U0zE9ApG4NpQc8LXhlklYn" alt="Grades icon">
+            </div>
+            <br>
+            <div class="col-12 text-center">
+                <strong class="legend-icons-index">{{#str}}download_grade_report, local_plantalentosuv{{/str}}</strong>
+            </div>
+        </div>
+    </div>
+</div>
