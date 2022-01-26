@@ -36,12 +36,16 @@ $PAGE->set_title(get_string('pluginname', 'local_plantalentosuv'));
 $PAGE->set_heading(get_string('header_plantalentosuv', 'local_plantalentosuv'));
 $PAGE->set_pagelayout('standard');
 
+$today = getdate();
+
+$attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
+
 $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         'local_plantalentosuv',
                                                         'plantalentosuvarea',
                                                         0,
                                                         '/',
-                                                        'attendancereport_ptuv_1638491221.json',
+                                                        $attendancefilename,
                                                         true);
 
 $data->urltoattendancereport = $urltoattendancereport;
