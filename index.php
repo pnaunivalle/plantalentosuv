@@ -39,6 +39,7 @@ $PAGE->set_pagelayout('standard');
 $today = getdate();
 
 $attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
+$gradesfilename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
 
 $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         'local_plantalentosuv',
@@ -48,7 +49,16 @@ $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         $attendancefilename,
                                                         true);
 
+$urltogradesreport = moodle_url::make_pluginfile_url($context->id,
+                                                        'local_plantalentosuv',
+                                                        'plantalentosuvarea',
+                                                        0,
+                                                        '/',
+                                                        $gradesfilename,
+                                                        true);
+
 $data->urltoattendancereport = $urltoattendancereport;
+$data->urltogradesreport = $urltogradesreport;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
