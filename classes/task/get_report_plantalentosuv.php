@@ -83,25 +83,43 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $today = getdate();
         $filename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
 
-        // $filestorage = get_file_storage();
+        $filestorage = get_file_storage();
 
-        // // Prepare file record object.
-        // $fileinfo = array(
-        //     'contextid' => $context->id,
-        //     'component' => 'local_plantalentosuv',
-        //     'filearea' => 'plantalentosuvarea',
-        //     'itemid' => 0,
-        //     'filepath' => '/',
-        //     'filename' => $filename);
+        // Prepare file record object.
+        $fileinfo = array(
+            'contextid' => $context->id,
+            'component' => 'local_plantalentosuv',
+            'filearea' => 'plantalentosuvarea',
+            'itemid' => 0,
+            'filepath' => '/',
+            'filename' => $filename);
 
-        // // Create and storage file.
-        // $filestorage->create_file_from_string($fileinfo, $userattendancejson);
+        // Create and storage file.
+        $filestorage->create_file_from_string($fileinfo, $userattendancejson);
 
         // Get grade report.
 
         $managergradereport = new \local_plantalentosuv\manage_grade_report();
 
         $usergrades = $managergradereport->get_user_grades($members[0]['userids']);
+        $usergradesjson = json_encode($usergrades);
+
+        $today = getdate();
+        $filename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
+
+        $filestorage = get_file_storage();
+
+        // Prepare file record object.
+        $fileinfo = array(
+            'contextid' => $context->id,
+            'component' => 'local_plantalentosuv',
+            'filearea' => 'plantalentosuvarea',
+            'itemid' => 0,
+            'filepath' => '/',
+            'filename' => $filename);
+
+        // Create and storage file.
+        $filestorage->create_file_from_string($fileinfo, $usergradesjson);
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
