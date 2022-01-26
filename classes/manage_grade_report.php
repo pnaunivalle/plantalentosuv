@@ -28,7 +28,8 @@ use moodle_exception;
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once($CFG->dirroot.'/grade/export/xml/grade_export_xml.php');
+require_once($CFG->dirroot.'/grade/lib.php');
+require_once($CFG->dirroot.'/grade/report/user/lib.php');
 
 /**
  * Grade report manager class
@@ -47,7 +48,10 @@ class manage_grade_report {
      * @since Moodle 3.10
      */
     public function get_user_grades($usersids) {
+
         global $DB;
+
+        $usergradesreport = array();
 
         $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
 
@@ -57,30 +61,67 @@ class manage_grade_report {
 
         foreach ($usersids as $userid) {
 
+            // Get user data.
+            $sqlquery = "SELECT u.id, u.username, u.lastname, u.firstname, u.email
+            FROM {user} u
+            WHERE id = ".$userid;
+
+            $userdata = $DB->get_record_sql($sqlquery);
+
             $usercourses = enrol_get_users_courses($userid, true, null, 'id');
+
+            $usergradesreport[$userid]['userid'] = $userid;
+            $usergradesreport[$userid]['username'] = $userdata->username;
+            $usergradesreport[$userid]['lastname'] = $userdata->lastname;
+            $usergradesreport[$userid]['firstname'] = $userdata->firstname;
+            $usergradesreport[$userid]['email'] = $userdata->email;
 
             foreach ($usercourses as $course) {
                 if ($course->category != $categoryid) {
                     unset($usercourses[$course->id]);
                 } else {
-                    $courseobject = $DB->get_record('course', array('id' => $course->id));
-                    $gradereport = new \grade_export_xml($courseobject, 0, null);
-                    if($course->id == 64976) {
-                        print_r($gradereport);
-                        die();
+
+                    $gpr = new \grade_plugin_return(
+                        array(
+                            'type' => 'report',
+                            'plugin' => 'user',
+                            'courseid' => $course->id,
+                            'userid' => $userid)
+                        );
+
+                    $context = \context_course::instance($course->id);
+
+                    $gradereport = new \grade_report_user($course->id, $gpr, $context, $userid);
+                    $gradereport->fill_table();
+
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['courseid'] = $course->id;
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['shortname'] = $course->shortname;
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['fullname'] = $course->fullname;
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['items'] = array();
+
+                    $itemsdata = array();
+
+                    foreach ($gradereport->tabledata as $item) {
+                        $itemdata = array();
+                        if (isset($item['weight'])) {
+
+                            $itemnameraw = $item['itemname']['content'];
+
+                            $itemdata['itemname'] = $itemnameraw;
+                            $itemdata['weight'] = $item['weight']['content'];
+                            $itemdata['grade'] = $item['grade']['content'];
+                            $itemdata['feedback'] = $item['feedback']['content'];
+                            $itemdata['contributiontocoursetotal'] = $item['contributiontocoursetotal']['content'];
+
+                            array_push($itemsdata, $itemdata);
+                        }
                     }
 
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['items'] = $itemsdata;
                 }
-
             }
-
-            // Get user data.
-            $sqlquery = "SELECT u.id, u.username, u.lastname, u.firstname, u.email
-                        FROM {user} u
-                        WHERE id = ".$userid;
-
-            $userdata = $DB->get_record_sql($sqlquery);
-
         }
+
+        return $usergradesreport;
     }
 }
