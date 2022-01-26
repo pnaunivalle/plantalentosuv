@@ -81,7 +81,7 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $userattendancejson = json_encode($userattendance);
 
         $today = getdate();
-        $filename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
+        $filename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
 
         $filestorage = get_file_storage();
 
@@ -105,7 +105,7 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $usergradesjson = json_encode($usergrades);
 
         $today = getdate();
-        $filename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
+        $filename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
 
         $filestorage = get_file_storage();
 

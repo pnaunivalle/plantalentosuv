@@ -38,8 +38,8 @@ $PAGE->set_pagelayout('standard');
 
 $today = getdate();
 
-$attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
-$gradesfilename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'];
+$attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
+$gradesfilename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
 
 $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         'local_plantalentosuv',
