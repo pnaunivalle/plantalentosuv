@@ -44,6 +44,7 @@ $string['plantalentosuv:viewreport'] = 'View report';
 
 // Tasks.
 $string['get_report_plantalentosuv'] = 'Get report Plan Talentos UV';
+$string['clean_plantalentosuv_filearea'] = 'Clean file area of plugin Plan Talentos UV';
 
 // Index.
 $string['download_attendance_report'] = 'Download attendance report';
