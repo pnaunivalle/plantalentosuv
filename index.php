@@ -57,6 +57,12 @@ $urltogradesreport = moodle_url::make_pluginfile_url($context->id,
                                                         $gradesfilename,
                                                         true);
 
+// Get files in the filearea.
+$fs = get_file_storage();
+$files = $fs->get_area_files($context->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
+
+$data->filesinfilearea = "En el área de archivos del plugin se encuentran ".count($files)." archivos";
+
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
 
