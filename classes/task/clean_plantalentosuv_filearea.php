@@ -54,6 +54,7 @@ class clean_plantalentosuv_filearea extends \core\task\scheduled_task {
 
         $timenow = time();
         $starttime = microtime();
+        $counterfiles = 0;
 
         mtrace("Update cron started at: " . date('r', $timenow) . "\n");
 
@@ -80,13 +81,18 @@ class clean_plantalentosuv_filearea extends \core\task\scheduled_task {
 
             // Delete it if it exists.
             if ($file) {
-                $file->delete();
+                $resultdelete = $file->delete();
+
+                if ($resultdelete) {
+                    $counterfiles += 1;
+                }
             }
         }
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
-        mtrace('Memoria utilizada: ' . display_size(memory_get_usage()));
+        mtrace('Memoria utilizada: ' . display_size(memory_get_usage())."\n");
+        mtrace('Archivos eliminados: '.$counterfiles);
         $difftime = microtime_diff($starttime, microtime());
         mtrace("Tarea programada tardó " . $difftime . " segundos para finalizar.\n");
     }
