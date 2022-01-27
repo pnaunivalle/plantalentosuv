@@ -57,7 +57,32 @@ class clean_plantalentosuv_filearea extends \core\task\scheduled_task {
 
         mtrace("Update cron started at: " . date('r', $timenow) . "\n");
 
-        // Code for clean file area.
+        $context = \context_system::instance();
+
+        // Get files to delete.
+        $fs = get_file_storage();
+        $files = $fs->get_area_files($context->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
+
+        foreach ($files as $file) {
+
+            // Prepare file record object.
+            $fileinfo = array(
+                'component' => 'local_plantalentosuv',
+                'filearea' => 'plantalentosuvarea',
+                'itemid' => 0,
+                'contextid' => $context->id,
+                'filepath' => '/',
+                'filename' => $file->get_filename());
+
+            // Get file.
+            $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                    $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+
+            // Delete it if it exists.
+            if ($file) {
+                $file->delete();
+            }
+        }
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
