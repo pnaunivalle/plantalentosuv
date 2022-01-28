@@ -3,6 +3,11 @@
     margin-bottom: 30px;
 }
 
+#div-notes {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
 .legend-icons-index {
     font-size: large;
 }

@@ -49,3 +49,5 @@ $string['clean_plantalentosuv_filearea'] = 'Clean file area of plugin Plan Talen
 // Index.
 $string['download_attendance_report'] = 'Download attendance report';
 $string['download_grade_report'] = 'Download grade report';
+$string['counter_files'] = ' files are stored in the plugin file area.';
+$string['info'] = 'Information';
