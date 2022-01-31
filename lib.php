@@ -32,20 +32,22 @@ defined('MOODLE_INTERNAL') || die();
  */
 function local_plantalentosuv_extend_navigation(global_navigation $root) {
 
-    if (get_config('local_plantalentosuv', 'showinnavigation')) {
+    $hasmaintenanceaccess = has_capability('moodle/site:maintenanceaccess', context_system::instance());
+
+    if (!$hasmaintenanceaccess && get_config('local_plantalentosuv', 'showinnavigation')) {
 
         $node = navigation_node::create(
             get_string('pluginname', 'local_plantalentosuv'),
             new moodle_url('/local/plantalentosuv/index.php'),
-            navigation_node::TYPE_CUSTOM,
-            null,
-            null,
-            new pix_icon('t/message', '')
+            navigation_node::TYPE_SYSTEM,
+            'plantalentosuv',
+            'plantalentosuv',
+            new pix_icon('i/report', 'local_plantalentosuv')
         );
 
         $node->showinflatnavigation = true;
 
-        $root->add_node($node);
+        $root->add_node($node, 'calendar');
     }
 }
 
@@ -89,3 +91,4 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
 
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
+
