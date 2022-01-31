@@ -28,6 +28,9 @@ $string['pluginname'] = 'Plan Talentos UV';
 $string['ptuv:plugindescription'] = 'Plugin developed for the Talent Plan of the Universidad del Valle.';
 $string['header_plantalentosuv'] = 'Talent Plan of the Universidad del Valle';
 
+// Access.
+$string['reports'] = 'Reports for the UV Talents Plan';
+
 // Plugin settings.
 $string['manage'] = 'Settings for the Plan Talentos Universidad del Valle plugin';
 $string['showinnavigation'] = 'Show in navigation';
