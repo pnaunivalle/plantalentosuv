@@ -24,7 +24,12 @@
 
 namespace local_plantalentosuv;
 
+use moodle_exception;
+
 defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->dirroot.'/grade/lib.php');
+require_once($CFG->dirroot.'/grade/report/user/lib.php');
 
 /**
  * Grade report manager class
@@ -36,13 +41,112 @@ defined('MOODLE_INTERNAL') || die;
 class manage_grade_report {
 
     /**
-     * Get attendance for users
+     * Get user grades
      *
      * @param  array $usersids
-     * @return array $userattendance
+     * @return array $usergrades
      * @since Moodle 3.10
      */
-    public function get_attendance_users($usersids) {
+    public function get_user_grades($usersids) {
+
         global $DB;
+
+        $usergradesreport = array();
+
+        $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+
+        // Validate params.
+        $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+        $categoryid = $category->id;
+
+        foreach ($usersids as $userid) {
+
+            // Get user data.
+            $sqlquery = "SELECT u.id, u.username, u.lastname, u.firstname, u.email
+            FROM {user} u
+            WHERE id = ".$userid;
+
+            $userdata = $DB->get_record_sql($sqlquery);
+
+            $usercourses = enrol_get_users_courses($userid, true, null, 'id');
+
+            $usergradesreport[$userid]['userid'] = $userid;
+            $usergradesreport[$userid]['username'] = $userdata->username;
+            $usergradesreport[$userid]['lastname'] = $userdata->lastname;
+            $usergradesreport[$userid]['firstname'] = $userdata->firstname;
+            $usergradesreport[$userid]['email'] = $userdata->email;
+
+            foreach ($usercourses as $course) {
+                if ($course->category != $categoryid) {
+                    unset($usercourses[$course->id]);
+                } else {
+
+                    $gpr = new \grade_plugin_return(
+                        array(
+                            'type' => 'report',
+                            'plugin' => 'user',
+                            'courseid' => $course->id,
+                            'userid' => $userid)
+                        );
+
+                    $context = \context_course::instance($course->id);
+
+                    $gradereport = new \grade_report_user($course->id, $gpr, $context, $userid);
+                    $gradereport->fill_table();
+
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['courseid'] = $course->id;
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['shortname'] = $course->shortname;
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['fullname'] = $course->fullname;
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['items'] = array();
+
+                    $itemsdata = array();
+
+                    foreach ($gradereport->tabledata as $item) {
+                        $itemdata = array();
+
+                        if (isset($item['weight'])) {
+
+                            $itemnameraw = $item['itemname']['content'];
+
+                            $dom = new \DOMDocument();
+                            $dom->loadHTML($itemnameraw);
+                            $domx = new \DOMXPath($dom);
+
+                            $entries = $domx->evaluate("//a");
+
+                            if ($entries->length > 0) {
+                                foreach ($entries as $entry) {
+                                    $itemid = "";
+                                    $itemname = "";
+                                    $itemurl = $entry->getAttribute('href');
+                                    $itemid = explode('&', explode('id=', $itemurl)[1])[0];
+                                    $itemname = $entry->nodeValue;
+
+                                }
+                            } else {
+                                $entries = $domx->evaluate("//span");
+
+                                foreach ($entries as $entry) {
+                                    $itemid = $course->id;
+                                    $itemname = $entry->nodeValue;
+
+                                }
+                            }
+
+                            $itemdata['itemid'] = $itemid;
+                            $itemdata['itemname'] = $itemname;
+                            $itemdata['grade'] = $item['grade']['content'];
+                            $itemdata['feedback'] = $item['feedback']['content'];
+
+                            array_push($itemsdata, $itemdata);
+                        }
+                    }
+
+                    $usergradesreport[$userid]['courses']['course-'.$course->id]['items'] = $itemsdata;
+                }
+            }
+        }
+
+        return $usergradesreport;
     }
 }

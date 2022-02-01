@@ -28,6 +28,9 @@ $string['pluginname'] = 'Plan Talentos UV';
 $string['ptuv:plugindescription'] = 'Plugin developed for the Talent Plan of the Universidad del Valle.';
 $string['header_plantalentosuv'] = 'Talent Plan of the Universidad del Valle';
 
+// Access.
+$string['reports'] = 'Reports for the UV Talents Plan';
+
 // Plugin settings.
 $string['manage'] = 'Settings for the Plan Talentos Universidad del Valle plugin';
 $string['showinnavigation'] = 'Show in navigation';
@@ -44,7 +47,10 @@ $string['plantalentosuv:viewreport'] = 'View report';
 
 // Tasks.
 $string['get_report_plantalentosuv'] = 'Get report Plan Talentos UV';
+$string['clean_plantalentosuv_filearea'] = 'Clean file area of plugin Plan Talentos UV';
 
 // Index.
 $string['download_attendance_report'] = 'Download attendance report';
 $string['download_grade_report'] = 'Download grade report';
+$string['counter_files'] = ' files are stored in the plugin file area.';
+$string['info'] = 'Information';

@@ -28,6 +28,9 @@ $string['pluginname'] = 'Plan Talentos UV';
 $string['plugindescription'] = 'Extensión desarrollada para el Plan Talentos de la Universidad del Valle.';
 $string['header_plantalentosuv'] = 'Plan Talentos Universidad del Valle';
 
+// Access.
+$string['reports'] = 'Reportes para el Plan Talentos UV';
+
 // Plugin settings.
 $string['manage'] = 'Configuración para la extensión Plan Talentos Universidad del Valle';
 $string['showinnavigation'] = 'Mostrar en la navegación';
@@ -44,7 +47,10 @@ $string['plantalentosuv:viewreport'] = 'Ver reporte';
 
 // Tasks.
 $string['get_report_plantalentosuv'] = 'Obtener reporte Plan Talentos UV';
+$string['clean_plantalentosuv_filearea'] = 'Limpiar el área de archivos del plugin Plan Talentos UV';
 
 // Index.
 $string['download_attendance_report'] = 'Descargar reporte de asistencias';
 $string['download_grade_report'] = 'Descargar reporte de calificaciones';
+$string['counter_files'] = ' archivos son almacenados en el área de archivos del plugin.';
+$string['info'] = 'Información';

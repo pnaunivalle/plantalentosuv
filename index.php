@@ -36,15 +36,35 @@ $PAGE->set_title(get_string('pluginname', 'local_plantalentosuv'));
 $PAGE->set_heading(get_string('header_plantalentosuv', 'local_plantalentosuv'));
 $PAGE->set_pagelayout('standard');
 
+$today = getdate();
+
+$attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
+$gradesfilename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
+
 $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         'local_plantalentosuv',
                                                         'plantalentosuvarea',
                                                         0,
                                                         '/',
-                                                        'attendancereport_ptuv_1638491221.json',
+                                                        $attendancefilename,
                                                         true);
 
+$urltogradesreport = moodle_url::make_pluginfile_url($context->id,
+                                                        'local_plantalentosuv',
+                                                        'plantalentosuvarea',
+                                                        0,
+                                                        '/',
+                                                        $gradesfilename,
+                                                        true);
+
+// Get files in the filearea.
+$fs = get_file_storage();
+$files = $fs->get_area_files($context->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
+
+$data->filesinfilearea = count($files).get_string('counter_files', 'local_plantalentosuv');
+
 $data->urltoattendancereport = $urltoattendancereport;
+$data->urltogradesreport = $urltogradesreport;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);

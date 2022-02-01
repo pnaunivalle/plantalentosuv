@@ -28,6 +28,16 @@ $tasks = [
     [
         'classname' => 'local_plantalentosuv\task\get_report_plantalentosuv',
         'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '0',
+        'disabled' => 0
+    ],
+    [
+        'classname' => 'local_plantalentosuv\task\clean_plantalentosuv_filearea',
+        'blocking' => 0,
         'minute' => '*',
         'hour' => '2',
         'day' => '*',

@@ -58,21 +58,25 @@ class manage_attendance {
             // Get user data.
             $sqlquery = "SELECT u.id, u.username, u.lastname, u.firstname, u.email
                         FROM {user} u
-                        WHERE id = $userid";
+                        WHERE id = ".$userid;
 
             $userdata = $DB->get_record_sql($sqlquery);
 
             if (!empty($usercourses)) {
 
-                list($usql, $uparams) = $DB->get_in_or_equal(array_keys($usercourses), SQL_PARAMS_NAMED, 'cid0');
+                list($csql, $uparams) = $DB->get_in_or_equal(array_keys($usercourses), SQL_PARAMS_NAMED, 'cid0');
 
-                $sqlquery = "SELECT att.id as attid, att.course as courseid, course.fullname as coursefullname,
-                                course.shortname as courseshortname, course.startdate as coursestartdate, att.name as attname,
-                                att.grade as attgrade
+                $sqlquery = "SELECT att.id as attid,
+                                    att.course as courseid,
+                                    course.fullname as coursefullname,
+                                    course.shortname as courseshortname,
+                                    course.startdate as coursestartdate,
+                                    att.name as attname,
+                                    att.grade as attgrade
                             FROM {attendance} att
                             JOIN {course} course
                                 ON att.course = course.id
-                            WHERE att.course $usql
+                            WHERE att.course $csql
                             ORDER BY coursefullname ASC, attname ASC";
 
                 $params = array_merge($uparams, array('uid' => $userid));

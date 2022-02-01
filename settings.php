@@ -56,4 +56,12 @@ if ($hassiteconfig) {
     }
 
     $ADMIN->add('localplugins', $settingspage);
+
+    $ADMIN->add('reports', new admin_category('plantalentosuv', new lang_string('pluginname', 'local_plantalentosuv')));
+
+    $ADMIN->add('plantalentosuv',
+        new admin_externalpage('index', new lang_string('reports', 'local_plantalentosuv'),
+            new moodle_url('/local/plantalentosuv/index.php'), 'moodle/site:configview'
+        )
+    );
 }
