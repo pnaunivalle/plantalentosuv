@@ -103,15 +103,40 @@ class manage_grade_report {
 
                     foreach ($gradereport->tabledata as $item) {
                         $itemdata = array();
+
                         if (isset($item['weight'])) {
 
                             $itemnameraw = $item['itemname']['content'];
 
-                            $itemdata['itemname'] = $itemnameraw;
-                            $itemdata['weight'] = $item['weight']['content'];
+                            $dom = new \DOMDocument();
+                            $dom->loadHTML($itemnameraw);
+                            $domx = new \DOMXPath($dom);
+
+                            $entries = $domx->evaluate("//a");
+
+                            if ($entries->length > 0) {
+                                foreach ($entries as $entry) {
+                                    $itemid = "";
+                                    $itemname = "";
+                                    $itemurl = $entry->getAttribute('href');
+                                    $itemid = explode('&', explode('id=', $itemurl)[1])[0];
+                                    $itemname = $entry->nodeValue;
+
+                                }
+                            } else {
+                                $entries = $domx->evaluate("//span");
+
+                                foreach ($entries as $entry) {
+                                    $itemid = $course->id;
+                                    $itemname = $entry->nodeValue;
+
+                                }
+                            }
+
+                            $itemdata['itemid'] = $itemid;
+                            $itemdata['itemname'] = $itemname;
                             $itemdata['grade'] = $item['grade']['content'];
                             $itemdata['feedback'] = $item['feedback']['content'];
-                            $itemdata['contributiontocoursetotal'] = $item['contributiontocoursetotal']['content'];
 
                             array_push($itemsdata, $itemdata);
                         }
