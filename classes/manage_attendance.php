@@ -117,6 +117,7 @@ class manage_attendance {
 
                         $att = new \mod_attendance_structure($attendance, $cm, $courserecord, $context, $pageparams);
 
+                        $statuses = $att->get_statuses();
                         $fullsessionlogsraw = $att->get_user_filtered_sessions_log_extended($userid);
                         $fullsessionlogs = array();
 
@@ -129,6 +130,8 @@ class manage_attendance {
                                 $sessionlog['timestamp'] = $sessionlograw->sessdate;
                                 $sessionlog['description'] = $sessionlograw->description;
                                 $sessionlog['statusid'] = $sessionlograw->statusid;
+                                $sessionlog['statusacronym'] = $statuses[$sessionlograw->statusid]->acronym;
+                                $sessionlog['statusdescription'] = $statuses[$sessionlograw->statusid]->description;
                                 $sessionlog['duration'] = $sessionlograw->duration;
 
                                 array_push($fullsessionlogs, $sessionlog);
