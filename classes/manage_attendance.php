@@ -121,14 +121,18 @@ class manage_attendance {
                         $fullsessionlogs = array();
 
                         foreach ($fullsessionlogsraw as $sessionlograw) {
-                            $sessionlog = array();
-                            $sessionlog['sessionid'] = $sessionlograw->id;
-                            $sessionlog['timestamp'] = $sessionlograw->sessdate;
-                            $sessionlog['description'] = $sessionlograw->description;
-                            $sessionlog['statusid'] = $sessionlograw->statusid;
-                            $sessionlog['duration'] = $sessionlograw->duration;
 
-                            array_push($fullsessionlogs, $sessionlog);
+                            // Only sessions taken are added.
+                            if ($sessionlograw->statusid) {
+                                $sessionlog = array();
+                                $sessionlog['sessionid'] = $sessionlograw->id;
+                                $sessionlog['timestamp'] = $sessionlograw->sessdate;
+                                $sessionlog['description'] = $sessionlograw->description;
+                                $sessionlog['statusid'] = $sessionlograw->statusid;
+                                $sessionlog['duration'] = $sessionlograw->duration;
+
+                                array_push($fullsessionlogs, $sessionlog);
+                            }
                         }
 
                         $courseinfo = array();
