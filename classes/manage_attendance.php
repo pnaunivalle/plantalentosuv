@@ -160,5 +160,4 @@ class manage_attendance {
 
         return $userattendances;
     }
-
 }

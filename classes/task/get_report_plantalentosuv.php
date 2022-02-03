@@ -78,7 +78,7 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $managerattendance = new \local_plantalentosuv\manage_attendance();
 
         $userattendance = $managerattendance->get_attendance_users($members[0]['userids']);
-        $userattendancejson = json_encode($userattendance);
+        $userattendancejson = json_encode($userattendance, JSON_UNESCAPED_UNICODE);
 
         $today = getdate();
         $filename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
@@ -102,7 +102,7 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $managergradereport = new \local_plantalentosuv\manage_grade_report();
 
         $usergrades = $managergradereport->get_user_grades($members[0]['userids']);
-        $usergradesjson = json_encode($usergrades);
+        $usergradesjson = json_encode($usergrades, JSON_UNESCAPED_UNICODE);
 
         $today = getdate();
         $filename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
