@@ -28,6 +28,7 @@ use mod_attendance_summary;
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once(dirname(__FILE__).'/../../../mod/attendance/locallib.php');
 require_once(dirname(__FILE__).'/../../../mod/attendance/classes/summary.php');
 
 /**
@@ -49,7 +50,7 @@ class manage_attendance {
     public function get_attendance_users($usersids) {
         global $DB;
 
-        $userattendance = array();
+        $userattendances = array();
 
         foreach ($usersids as $userid) {
 
@@ -81,35 +82,76 @@ class manage_attendance {
 
                 $params = array_merge($uparams, array('uid' => $userid));
 
-                $courseattendance = $DB->get_records_sql($sqlquery, $params);
+                $courseattendanceactivities = $DB->get_records_sql($sqlquery, $params);
 
-                foreach ($courseattendance as $attendance) {
-                    if (!empty($attendance)) {
-                        $summary = new mod_attendance_summary($attendance->attid, $userid);
-                        $userattendance[$userid]['id'] = $userid;
-                        $userattendance[$userid]['username'] = $userdata->username;
-                        $userattendance[$userid]['lastname'] = $userdata->lastname;
-                        $userattendance[$userid]['firstname'] = $userdata->firstname;
-                        $userattendance[$userid]['email'] = $userdata->email;
-                        $userattendance[$userid]['course-'.$attendance->courseid]['id'] = $attendance->courseid;
-                        $userattendance[$userid]['course-'.$attendance->courseid]['shortname'] = $attendance->courseshortname;
-                        $userattendance[$userid]['course-'.$attendance->courseid]['fullname'] = $attendance->coursefullname;
-                        $userattendance[$userid]['course-'.$attendance->courseid]['attendance-'.$attendance->attid] = array();
+                $userattendance = array();
+                $userattendance['userid'] = $userid;
+                $userattendance['username'] = $userdata->username;
+                $userattendance['lastname'] = $userdata->lastname;
+                $userattendance['firstname'] = $userdata->firstname;
+                $userattendance['email'] = $userdata->email;
+                $userattendance['courses'] = array();
 
-                        $attendancedata = array();
-                        $attendancedata['attendance_id'] = $attendance->attid;
-                        $attendancedata['attendance_name'] = $attendance->attname;
-                        $attendancedata['all_sessions_summary'] = $summary->get_all_sessions_summary_for($userid);
+                foreach ($courseattendanceactivities as $attendanceactivity) {
+                    if (!empty($attendanceactivity)) {
 
-                        array_push(
-                            $userattendance[$userid]['course-'.$attendance->courseid]['attendance-'.$attendance->attid],
-                            $attendancedata);
+                        $summary = new mod_attendance_summary($attendanceactivity->attid, $userid);
+
+                        // Data for student sessions report.
+                        $cm = get_coursemodule_from_instance('attendance', $attendanceactivity->attid, 0, false, MUST_EXIST);
+                        $attendance = $DB->get_record('attendance', array('id' => $attendanceactivity->attid), '*', MUST_EXIST);
+                        $courserecord = $DB->get_record('course', array('id' => $attendanceactivity->courseid), '*', MUST_EXIST);
+                        $context = \context_module::instance($cm->id);
+
+                        $pageparams = new \mod_attendance_view_page_params();
+
+                        $pageparams->edit = -1;
+                        $pageparams->studentid = $userid;
+                        $pageparams->mode = 2;
+                        $pageparams->view = 5;
+                        $pageparams->curdate = $courserecord->startdate;
+                        $pageparams->groupby = null;
+                        $pageparams->sesscourses = null;
+
+                        $pageparams->init($cm);
+
+                        $att = new \mod_attendance_structure($attendance, $cm, $courserecord, $context, $pageparams);
+
+                        $fullsessionlogsraw = $att->get_user_filtered_sessions_log_extended($userid);
+                        $fullsessionlogs = array();
+
+                        foreach ($fullsessionlogsraw as $sessionlograw) {
+                            $sessionlog = array();
+                            $sessionlog['sessionid'] = $sessionlograw->id;
+                            $sessionlog['timestamp'] = $sessionlograw->sessdate;
+                            $sessionlog['description'] = $sessionlograw->description;
+                            $sessionlog['statusid'] = $sessionlograw->statusid;
+                            $sessionlog['duration'] = $sessionlograw->duration;
+
+                            array_push($fullsessionlogs, $sessionlog);
+                        }
+
+                        $courseinfo = array();
+                        $courseinfo['courseid'] = $attendanceactivity->courseid;
+                        $courseinfo['courseshortname'] = $attendanceactivity->courseshortname;
+                        $courseinfo['coursefullname'] = $attendanceactivity->coursefullname;
+                        $courseinfo['attendance'] = array();
+                        $courseinfo['attendance']['attendanceid'] = $attendanceactivity->attid;
+                        $courseinfo['attendance']['attendancename'] = $attendanceactivity->attname;
+                        $courseinfo['attendance']['takensessionssumary'] = $summary->get_taken_sessions_summary_for($userid);
+                        $courseinfo['attendance']['fullsessionslog'] = $fullsessionlogs;
                     }
+
+                    array_push(
+                        $userattendance['courses'],
+                        $courseinfo);
                 }
             }
+
+            array_push($userattendances, $userattendance);
         }
 
-        return $userattendance;
+        return $userattendances;
     }
 
 }
