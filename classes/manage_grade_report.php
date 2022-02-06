@@ -61,22 +61,28 @@ class manage_grade_report {
 
         foreach ($usersids as $userid) {
 
+            $userreport = array();
+
             // Get user data.
             $sqlquery = "SELECT u.id, u.username, u.lastname, u.firstname, u.email
-            FROM {user} u
-            WHERE id = ".$userid;
+                        FROM {user} u
+                        WHERE id = ".$userid;
 
             $userdata = $DB->get_record_sql($sqlquery);
 
             $usercourses = enrol_get_users_courses($userid, true, null, 'id');
 
-            $usergradesreport[$userid]['userid'] = $userid;
-            $usergradesreport[$userid]['username'] = $userdata->username;
-            $usergradesreport[$userid]['lastname'] = $userdata->lastname;
-            $usergradesreport[$userid]['firstname'] = $userdata->firstname;
-            $usergradesreport[$userid]['email'] = $userdata->email;
+            $userreport['userid'] = $userid;
+            $userreport['username'] = $userdata->username;
+            $userreport['lastname'] = $userdata->lastname;
+            $userreport['firstname'] = $userdata->firstname;
+            $userreport['email'] = $userdata->email;
+            $userreport['courses'] = array();
 
             foreach ($usercourses as $course) {
+
+                $coursereport = array();
+
                 if ($course->category != $categoryid) {
                     unset($usercourses[$course->id]);
                 } else {
@@ -94,10 +100,10 @@ class manage_grade_report {
                     $gradereport = new \grade_report_user($course->id, $gpr, $context, $userid);
                     $gradereport->fill_table();
 
-                    $usergradesreport[$userid]['courses']['course-'.$course->id]['courseid'] = $course->id;
-                    $usergradesreport[$userid]['courses']['course-'.$course->id]['shortname'] = $course->shortname;
-                    $usergradesreport[$userid]['courses']['course-'.$course->id]['fullname'] = $course->fullname;
-                    $usergradesreport[$userid]['courses']['course-'.$course->id]['items'] = array();
+                    $coursereport['courseid'] = $course->id;
+                    $coursereport['shortname'] = $course->shortname;
+                    $coursereport['fullname'] = $course->fullname;
+                    $coursereport['items'] = array();
 
                     $itemsdata = array();
 
@@ -136,15 +142,24 @@ class manage_grade_report {
                             $itemdata['itemid'] = $itemid;
                             $itemdata['itemname'] = $itemname;
                             $itemdata['grade'] = $item['grade']['content'];
-                            $itemdata['feedback'] = $item['feedback']['content'];
+
+                            if ($item['feedback']['content'] == "&nbsp;") {
+                                $itemdata['feedback'] = null;
+                            } else {
+                                $itemdata['feedback'] = $item['feedback']['content'];
+                            }
 
                             array_push($itemsdata, $itemdata);
                         }
                     }
 
-                    $usergradesreport[$userid]['courses']['course-'.$course->id]['items'] = $itemsdata;
+                    $coursereport['items'] = $itemsdata;
+
+                    array_push($userreport['courses'], $coursereport);
                 }
             }
+
+            array_push($usergradesreport, $userreport);
         }
 
         return $usergradesreport;
