@@ -54,3 +54,15 @@ $string['download_attendance_report'] = 'Download attendance report';
 $string['download_grade_report'] = 'Download grade report';
 $string['counter_files'] = ' files are stored in the plugin file area.';
 $string['info'] = 'Information';
+
+// Settings.
+$string['generalsettingsheading'] = 'General settings';
+$string['generalsettingsheading_desc'] = 'General settings for the plugin';
+$string['googleapiheading'] = 'Google API';
+$string['googleapiheading_desc'] = 'Google API credentials for upload files to Google Drive.';
+$string['uploadtogoogledrive'] = 'Upload files to Google Drive';
+$string['uploadtogoogledrive_desc'] = 'If the checkbox is active, the files will be automatically uploaded to Google Drive';
+$string['jsonkey'] = 'JSON key';
+$string['jsonkey_desc'] = 'JSON key obtained from Google services app';
+$string['jsonpath'] = 'JSON path';
+$string['jsonpath_desc'] = 'JSON path obtained from Google services app';

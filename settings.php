@@ -31,6 +31,13 @@ if ($hassiteconfig) {
     $settingspage = new admin_settingpage('managelocalplantalentosuv', new lang_string('manage', 'local_plantalentosuv'));
 
     if ($ADMIN->fulltree) {
+
+        // General settings.
+        $settingspage->add(new admin_setting_heading(
+            'generalsettingsheading',
+            new lang_string('generalsettingsheading', 'local_plantalentosuv'),
+            new lang_string('generalsettingsheading_desc', 'local_plantalentosuv')));
+
         $settingspage->add(new admin_setting_configcheckbox(
             'local_plantalentosuv/showinnavigation',
             new lang_string('showinnavigation', 'local_plantalentosuv'),
@@ -53,6 +60,36 @@ if ($hassiteconfig) {
             0,
             PARAM_TEXT
         ));
+
+        // Google API settings.
+        $settingspage->add(new admin_setting_heading(
+            'googleapiheading',
+            new lang_string('googleapiheading', 'local_plantalentosuv'),
+            new lang_string('googleapiheading_desc', 'local_plantalentosuv')));
+
+        $settingspage->add(new admin_setting_configcheckbox(
+            'local_plantalentosuv/uploadtogoogledrive',
+            new lang_string('uploadtogoogledrive', 'local_plantalentosuv'),
+            new lang_string('uploadtogoogledrive_desc', 'local_plantalentosuv'),
+            1
+        ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/jsonkey',
+            new lang_string('jsonkey', 'local_plantalentosuv'),
+            new lang_string('jsonkey_desc', 'local_plantalentosuv'),
+            0,
+            PARAM_TEXT
+        ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/jsonpath',
+            new lang_string('jsonpath', 'local_plantalentosuv'),
+            new lang_string('jsonpath_desc', 'local_plantalentosuv'),
+            0,
+            PARAM_TEXT
+        ));
+
     }
 
     $ADMIN->add('localplugins', $settingspage);
