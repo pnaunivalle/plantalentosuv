@@ -39,17 +39,20 @@ require_once($CFG->dirroot . '/local/plantalentosuv/googleapi/vendor/autoload.ph
 class upload_files_google_drive {
 
     /**
-     * upload_file
+     * Function to upload files to Google Drive.
      *
-     * @param  mixed $filename
-     * @param  mixed $mimetype
-     * @param  mixed $filecontent
-     * @param  mixed $description
-     * @return void
+     * @param  string $filename
+     * @param  string $mimetype
+     * @param  string $filecontent
+     * @param  string $description
+     * @return bool   $result
+     * @since  Moodle3.10
      */
     public function upload_file ($filename, $mimetype, $filecontent, $description) {
 
         global $CFG;
+
+        $result = false;
 
         // Credential variables.
         $jsonkey = get_config('local_plantalentosuv', 'jsonkey');
@@ -67,12 +70,16 @@ class upload_files_google_drive {
         $drivefile->setParents([$jsonkey]);
         $drivefile->setDescription($description);
 
-        $result = $service->files->create(
+        $fileuploaded = $service->files->create(
             $drivefile,
             array('data' => $filecontent,
                   'mimeType' => $mimetype,
                   'uploadType' => 'media')
         );
+
+        if ($fileuploaded) {
+            $result = true;
+        }
 
         return $result;
     }
