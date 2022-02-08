@@ -38,13 +38,22 @@ require_once($CFG->dirroot . '/local/plantalentosuv/googleapi/vendor/autoload.ph
  */
 class upload_files_google_drive {
 
-    public function upload_file ($filename, $mimetype, $filecontent) {
+    /**
+     * upload_file
+     *
+     * @param  mixed $filename
+     * @param  mixed $mimetype
+     * @param  mixed $filecontent
+     * @param  mixed $description
+     * @return void
+     */
+    public function upload_file ($filename, $mimetype, $filecontent, $description) {
 
         global $CFG;
 
         // Credential variables.
         $jsonkey = get_config('local_plantalentosuv', 'jsonkey');
-        $jsonpath = $CFG->dirroot.get_config('local_plantalentosuv', 'jsonpath');
+        $jsonpath = $CFG->dirroot.'/local/plantalentosuv/'.get_config('local_plantalentosuv', 'jsonpath');
 
         $client = new \Google_Client();
         $client->setAuthConfig($jsonpath);
@@ -56,7 +65,7 @@ class upload_files_google_drive {
         $drivefile->setName($filename);
         $drivefile->setMimeType($mimetype);
         $drivefile->setParents([$jsonkey]);
-        $drivefile->setDescription('File added');
+        $drivefile->setDescription($description);
 
         $result = $service->files->create(
             $drivefile,
