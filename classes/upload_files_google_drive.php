@@ -27,7 +27,7 @@ namespace local_plantalentosuv;
 defined('MOODLE_INTERNAL') || die;
 
 // All Google API classes support autoload with this.
-require_once($CFG->libdir . '/google/src/Google/autoload.php');
+require_once($CFG->dirroot . '/local/plantalentosuv/googleapi/vendor/autoload.php');
 
 /**
  * Grade report manager class
@@ -38,18 +38,33 @@ require_once($CFG->libdir . '/google/src/Google/autoload.php');
  */
 class upload_files_google_drive {
 
-    public function upload_file () {
+    public function upload_file ($filename, $mimetype, $filecontent) {
+
+        global $CFG;
 
         // Credential variables.
-        $jsonkey = '';
-        $jsonpath = '';
-
-        putenv('GOOGLE_APPLICATION_CREDENTIALS='.$jsonpath);
+        $jsonkey = get_config('local_plantalentosuv', 'jsonkey');
+        $jsonpath = $CFG->dirroot.get_config('local_plantalentosuv', 'jsonpath');
 
         $client = new \Google_Client();
-        $client->setDeveloperKey($jsonkey);
-        $client->setScopes(['https://www.googleapis.com/auth/drive.file']);
+        $client->setAuthConfig($jsonpath);
+        $client->addScope("https://www.googleapis.com/auth/drive");
 
         $service = new \Google_Service_Drive($client);
+
+        $drivefile = new \Google_Service_Drive_DriveFile();
+        $drivefile->setName($filename);
+        $drivefile->setMimeType($mimetype);
+        $drivefile->setParents([$jsonkey]);
+        $drivefile->setDescription('File added');
+
+        $result = $service->files->create(
+            $drivefile,
+            array('data' => $filecontent,
+                  'mimeType' => $mimetype,
+                  'uploadType' => 'media')
+        );
+
+        return $result;
     }
 }

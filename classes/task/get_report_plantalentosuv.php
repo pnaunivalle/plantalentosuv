@@ -95,7 +95,12 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             'filename' => $filename);
 
         // Create and storage file.
-        $filestorage->create_file_from_string($fileinfo, $userattendancejson);
+        $file = $filestorage->create_file_from_string($fileinfo, $userattendancejson);
+        $fileid = $file->get_id();
+
+        // Upload file attendance report to Google Drive.
+        $managerupload = new \local_plantalentosuv\upload_files_google_drive();
+        $resultupload = $managerupload->upload_file($filename, 'application/json', $userattendancejson);
 
         // Get grade report.
 
