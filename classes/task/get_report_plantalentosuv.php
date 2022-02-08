@@ -96,7 +96,6 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
 
         // Create and storage file.
         $file = $filestorage->create_file_from_string($fileinfo, $userattendancejson);
-        $fileid = $file->get_id();
 
         // Upload file attendance report to Google Drive.
         $managerupload = new \local_plantalentosuv\upload_files_google_drive();
@@ -125,6 +124,10 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
 
         // Create and storage file.
         $filestorage->create_file_from_string($fileinfo, $usergradesjson);
+
+        // Upload file attendance report to Google Drive.
+        $managerupload = new \local_plantalentosuv\upload_files_google_drive();
+        $resultupload = $managerupload->upload_file($filename, 'application/json', $usergradesjson);
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
