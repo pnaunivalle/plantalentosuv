@@ -103,7 +103,7 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             // Upload file attendance report to Google Drive.
             $managerupload = new \local_plantalentosuv\upload_files_google_drive();
             $filedescription = "Attendance report created on ".date("d")."_".date("m")."_".date("Y");
-            $resultupload = $managerupload->upload_file($attendancefile, 'application/json', $userattendancejson, $filedescription);
+            $resultupload = $managerupload->upload_file($attendancefilename, 'application/json', $userattendancejson, $filedescription);
         }
 
         // Get grade report.
