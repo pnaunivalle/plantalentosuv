@@ -27,9 +27,8 @@ Algunas dependecias y librerias:
 ### Via git/línea de comandos
 
 - Entrar a la carpeta local ubicada en la raíz del sitio Moodle.
-- Clonar el repositorio utilizando el siguiente comando 'git clone https://github.com/pnaunivalle/plantalentosuv.git plantalentosuv'
+- Clonar el repositorio utilizando el siguiente comando `git clone https://github.com/pnaunivalle/plantalentosuv.git plantalentosuv`
 - Ingresar a Moodle como administrador y dar clic en Notificaciones en el menú de administración del sitio.
-
 
 
 ## Especificaciones de los reportes retornados
@@ -45,8 +44,21 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
-###  Versión 2021113000
-Control de acceso. Se añaden permisos y capacidades.
+## Versión 2022020801 (v1.0)
+- Se incluye la libreria Google API PHP client v2.12.1
+- Se añaden configuraciones del plugin para gestionar la carga de archivos a Google Drive
+- Clase y métodos para cargar archivos a Google Drive
+- Clase y métodos para gestionar el reporte de calificaciones
 
-###  Versión 2021112600
+## Versión 2022012602 (v0.3)
+- Clase y métodos para gestionar el reporte de asistencias
+- Tarea programada para limpiar el área de archivos del plugin.
+
+###  Versión 2021113000 (v0.2)
+- Control de acceso.
+- Se añaden permisos y capacidades.
+- Se añaden configuraciones del plugin para gestionar la consulta de usuarios por cohorte y de cursos por categorías
+- Tarea programada para recuperar los reportes.
+
+###  Versión 2021112600 (v0.1)
 Desarrollo del esqueleto básico del plugin
