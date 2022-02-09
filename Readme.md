@@ -15,21 +15,38 @@ Algunas dependecias y librerias:
 - [Plugin Attendance](https://moodle.org/plugins/mod_attendance)
 - [Google API PHP client v2.12.1](https://github.com/googleapis/google-api-php-client/releases)
 
+## Instalación
+
+### Descargando el paquete de instalación
+
+- Descargar el archivo zip desde el repositorio.
+- Descomprimir el archivo en la carpeta local ubicada en la raíz del sitio Moodle.
+- Es necesario asegurarse que el nombre de la carpeta descomprimida es plantalentosuv y que la ruta completa de instalación es local/plantalentosuv.
+- Ingresar a Moodle como administrador y dar clic en Notificaciones en el menú de administración del sitio.
+
+### Via git/línea de comandos
+
+- Entrar a la carpeta local ubicada en la raíz del sitio Moodle.
+- Clonar el repositorio utilizando el siguiente comando 'git clone https://github.com/pnaunivalle/plantalentosuv.git plantalentosuv'
+- Ingresar a Moodle como administrador y dar clic en Notificaciones en el menú de administración del sitio.
+
+
+
 ## Especificaciones de los reportes retornados
 
 El plugin obtiene los datos de calificaciones y asistencias de los estudiantes pertenecientes a una cohorte y que estén matriculados en los cursos de una categoría determinada. Además obtiene la estructura de ítems de calificación y los datos de las sesiones de asistencia configuradas en dichos cursos.
 
 Los reportes retornados por el plugin son los siguientes:
 
-- ** Reporte de calificaciones: ** Reporte de los estudiantes pertenecientes a una cohorte y matriculados en una categoría determinada.
-- ** Reporte de asistencias: ** Reporte de los estudiantes pertenecientes a una cohorte y matriculados en una categoría determinada.
-- ** Reporte de ítems de calificación:  ** Estructura de los ítems de calificación de los cursos asociados a una categoría.
-- ** Reporte de sesiones de asistencia: ** Datos de las sesiones de asistencia configuradas en los cursos de una categoría determinada.
+- **Reporte de calificaciones:** Reporte de los estudiantes pertenecientes a una cohorte y matriculados en una categoría determinada.
+- **Reporte de asistencias:** Reporte de los estudiantes pertenecientes a una cohorte y matriculados en una categoría determinada.
+- **Reporte de ítems de calificación:** Estructura de los ítems de calificación de los cursos asociados a una categoría.
+- **Reporte de sesiones de asistencia:** Datos de las sesiones de asistencia configuradas en los cursos de una categoría determinada.
 
 ##  Versiones
 
-###  Versión 2021112600
-Desarrollo del esqueleto básico del plugin
-
 ###  Versión 2021113000
 Control de acceso. Se añaden permisos y capacidades.
+
+###  Versión 2021112600
+Desarrollo del esqueleto básico del plugin
