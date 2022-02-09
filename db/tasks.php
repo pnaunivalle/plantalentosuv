@@ -32,7 +32,7 @@ $tasks = [
         'hour' => '2',
         'day' => '*',
         'month' => '*',
-        'dayofweek' => '0',
+        'dayofweek' => '*',
         'disabled' => 0
     ],
     [
@@ -42,7 +42,7 @@ $tasks = [
         'hour' => '2',
         'day' => '*',
         'month' => '*',
-        'dayofweek' => '*',
+        'dayofweek' => '0',
         'disabled' => 0
     ]
 ];
