@@ -26,12 +26,24 @@ require_once('../../config.php');
 
 require_login();
 
+$systemcontext = context_system::instance();
+$PAGE->set_context($systemcontext);
+
+$categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+
+// Validate params.
+$category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+$categoryid = $category->id;
+
+$categorycontext = context_coursecat::instance($categoryid);
+
+if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
+    require_capability('local/plantalentosuv:viewreport', $categorycontext);
+}
+
 $data = new \stdClass();
 
-$context = \context_system::instance();
-
 $PAGE->set_url(new moodle_url('/local/plantalentosuv/index.php'));
-$PAGE->set_context($context);
 $PAGE->set_title(get_string('pluginname', 'local_plantalentosuv'));
 $PAGE->set_heading(get_string('header_plantalentosuv', 'local_plantalentosuv'));
 $PAGE->set_pagelayout('standard');
@@ -41,7 +53,7 @@ $today = getdate();
 $attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
 $gradesfilename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
 
-$urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
+$urltoattendancereport = moodle_url::make_pluginfile_url($systemcontext->id,
                                                         'local_plantalentosuv',
                                                         'plantalentosuvarea',
                                                         0,
@@ -49,7 +61,7 @@ $urltoattendancereport = moodle_url::make_pluginfile_url($context->id,
                                                         $attendancefilename,
                                                         true);
 
-$urltogradesreport = moodle_url::make_pluginfile_url($context->id,
+$urltogradesreport = moodle_url::make_pluginfile_url($systemcontext->id,
                                                         'local_plantalentosuv',
                                                         'plantalentosuvarea',
                                                         0,
@@ -59,7 +71,7 @@ $urltogradesreport = moodle_url::make_pluginfile_url($context->id,
 
 // Get files in the filearea.
 $fs = get_file_storage();
-$files = $fs->get_area_files($context->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
+$files = $fs->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
 
 $data->filesinfilearea = count($files).get_string('counter_files', 'local_plantalentosuv');
 
@@ -68,4 +80,5 @@ $data->urltogradesreport = $urltogradesreport;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
+
 echo $OUTPUT->footer();
