@@ -31,6 +31,13 @@ $capabilities = [
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_PROHIBIT,
+            'editingteacher' => CAP_PROHIBIT,
+            'teacher' => CAP_PROHIBIT,
+            'student' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+            'user' => CAP_PROHIBIT,
+            'frontpage' => CAP_PROHIBIT
         ],
     ],
 ];

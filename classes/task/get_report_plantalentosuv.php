@@ -78,10 +78,9 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $managerattendance = new \local_plantalentosuv\manage_attendance();
 
         $userattendance = $managerattendance->get_attendance_users($members[0]['userids']);
-        $userattendancejson = json_encode($userattendance);
+        $userattendancejson = json_encode($userattendance, JSON_UNESCAPED_UNICODE);
 
-        $today = getdate();
-        $filename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
+        $attendancefilename = "attendancereport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
 
         $filestorage = get_file_storage();
 
@@ -92,20 +91,28 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             'filearea' => 'plantalentosuvarea',
             'itemid' => 0,
             'filepath' => '/',
-            'filename' => $filename);
+            'filename' => $attendancefilename);
 
         // Create and storage file.
-        $filestorage->create_file_from_string($fileinfo, $userattendancejson);
+        $attendancefile = $filestorage->create_file_from_string($fileinfo, $userattendancejson);
+
+        if ($attendancefile->get_id() > 0) {
+
+            mtrace("Attendance report file created successfully named ".$attendancefilename);
+
+            // Upload file attendance report to Google Drive.
+            $managerupload = new \local_plantalentosuv\upload_files_google_drive();
+            $filedescription = "Attendance report created on ".date("d")."_".date("m")."_".date("Y");
+            $resultupload = $managerupload->upload_file($attendancefile, 'application/json', $userattendancejson, $filedescription);
+        }
 
         // Get grade report.
-
         $managergradereport = new \local_plantalentosuv\manage_grade_report();
 
         $usergrades = $managergradereport->get_user_grades($members[0]['userids']);
-        $usergradesjson = json_encode($usergrades);
+        $usergradesjson = json_encode($usergrades, JSON_UNESCAPED_UNICODE);
 
-        $today = getdate();
-        $filename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
+        $gradesfilename = "gradesreport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
 
         $filestorage = get_file_storage();
 
@@ -116,15 +123,25 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             'filearea' => 'plantalentosuvarea',
             'itemid' => 0,
             'filepath' => '/',
-            'filename' => $filename);
+            'filename' => $gradesfilename);
 
         // Create and storage file.
-        $filestorage->create_file_from_string($fileinfo, $usergradesjson);
+        $gradesfile = $filestorage->create_file_from_string($fileinfo, $usergradesjson);
+
+        // Upload file attendance report to Google Drive.
+        if ($gradesfile->get_id() > 0) {
+
+            mtrace("Grades report file created successfully named ".$gradesfilename);
+
+            $managerupload = new \local_plantalentosuv\upload_files_google_drive();
+            $filedescription = "Grades report created on ".date("d")."_".date("m")."_".date("Y");
+            $resultupload = $managerupload->upload_file($gradesfilename, 'application/json', $usergradesjson, $filedescription);
+        }
 
         // Update courses process completed.
-        mtrace("\n" . 'Cron completado a las: ' . date('r', time()) . "\n");
-        mtrace('Memoria utilizada: ' . display_size(memory_get_usage()));
+        mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");
+        mtrace('Used memory: ' . display_size(memory_get_usage()));
         $difftime = microtime_diff($starttime, microtime());
-        mtrace("Tarea programada tardó " . $difftime . " segundos para finalizar.\n");
+        mtrace("The scheduled task took " . $difftime . " seconds to finish.\n");
     }
 }

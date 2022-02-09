@@ -54,3 +54,15 @@ $string['download_attendance_report'] = 'Descargar reporte de asistencias';
 $string['download_grade_report'] = 'Descargar reporte de calificaciones';
 $string['counter_files'] = ' archivos son almacenados en el área de archivos del plugin.';
 $string['info'] = 'Información';
+
+// Settings.
+$string['generalsettingsheading'] = 'Configuraciones generales';
+$string['generalsettingsheading_desc'] = 'Configuraciones generales para el plugin';
+$string['googleapiheading'] = 'Google API';
+$string['googleapiheading_desc'] = 'Credenciales para la API de Google que permite cargar archivos en Google Drive';
+$string['uploadtogoogledrive'] = 'Cargar archivos a Google Drive';
+$string['uploadtogoogledrive_desc'] = 'Si está activo, se cargarán automáticamente los archivos de reportes a Google Drive';
+$string['jsonkey'] = 'JSON key';
+$string['jsonkey_desc'] = 'JSON key obtenida desde la aplicación de servicios de Google';
+$string['jsonpath'] = 'JSON path';
+$string['jsonpath_desc'] = 'JSON path obtenida desde la aplicación de servicios de Google';
