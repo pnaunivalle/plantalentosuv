@@ -44,21 +44,23 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
-## Versión 2022020801 (v1.0)
-- Se incluye la libreria Google API PHP client v2.12.1
-- Se añaden configuraciones del plugin para gestionar la carga de archivos a Google Drive
-- Clase y métodos para cargar archivos a Google Drive
-- Clase y métodos para gestionar el reporte de calificaciones
+## Versión 2022020801 (v1.0.0-beta)
+- Se incluye la librería Google API PHP client v2.12.1.
+- Se añaden configuraciones del plugin para gestionar la carga de archivos a Google Drive.
+- Clase y métodos para cargar archivos a Google Drive.
 
-## Versión 2022012602 (v0.3)
-- Clase y métodos para gestionar el reporte de asistencias
+
+## Versión 2022012602 (v0.3.0-alpha)
 - Tarea programada para limpiar el área de archivos del plugin.
+- Clase y métodos para gestionar el reporte de calificaciones.
+- Inclusión del reporte de calificaciones en la tarea programada para recuperar los reportes.
 
-###  Versión 2021113000 (v0.2)
+
+###  Versión 2021113000 (v0.2.0-alpha)
 - Control de acceso.
 - Se añaden permisos y capacidades.
-- Se añaden configuraciones del plugin para gestionar la consulta de usuarios por cohorte y de cursos por categorías
+- Se añaden configuraciones del plugin para gestionar la consulta de usuarios por cohorte y de cursos por categorías.
 - Tarea programada para recuperar los reportes.
 
-###  Versión 2021112600 (v0.1)
-Desarrollo del esqueleto básico del plugin
+###  Versión 2021112600 (v0.1.0-alpha)
+Desarrollo del esqueleto básico del plugin.
