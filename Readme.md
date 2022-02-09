@@ -19,7 +19,7 @@ Algunas dependecias y librerias:
 
 ### Descargando el paquete de instalación
 
-- Descargar el archivo zip desde el repositorio.
+- Descargar el archivo zip desde el [repositorio](https://github.com/pnaunivalle/plantalentosuv/releases).
 - Descomprimir el archivo en la carpeta local ubicada en la raíz del sitio Moodle.
 - Es necesario asegurarse que el nombre de la carpeta descomprimida es plantalentosuv y que la ruta completa de instalación es local/plantalentosuv.
 - Ingresar a Moodle como administrador y dar clic en Notificaciones en el menú de administración del sitio.
