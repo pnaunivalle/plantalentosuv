@@ -44,6 +44,10 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
+## Versión 202202XXX (v1.X.X-beta)
+- Se corrige error en nombre de archivo del reporte de asistencias
+- Se corrigen permisos de acceso al plugin desde diferentes roles
+
 ## Versión 2022020801 (v1.0.0-beta)
 - Se incluye la librería Google API PHP client v2.12.1.
 - Se añaden configuraciones del plugin para gestionar la carga de archivos a Google Drive.
