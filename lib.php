@@ -32,9 +32,21 @@ defined('MOODLE_INTERNAL') || die();
  */
 function local_plantalentosuv_extend_navigation(global_navigation $root) {
 
-    $hasmaintenanceaccess = has_capability('moodle/site:maintenanceaccess', context_system::instance());
+    global $DB;
 
-    if (!$hasmaintenanceaccess && get_config('local_plantalentosuv', 'showinnavigation')) {
+    $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+
+    // Validate params.
+    $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+
+    $categorycontext = context_coursecat::instance($category->id);
+
+    $hasmaintenanceaccess = has_capability('moodle/site:maintenanceaccess', context_system::instance());
+    $hasviewreportaccess = has_capability('local/plantalentosuv:viewreport', $categorycontext);
+
+    if (!$hasmaintenanceaccess
+        && get_config('local_plantalentosuv', 'showinnavigation')
+        && $hasviewreportaccess) {
 
         $node = navigation_node::create(
             get_string('pluginname', 'local_plantalentosuv'),
