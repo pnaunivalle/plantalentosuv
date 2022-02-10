@@ -29,6 +29,7 @@ use moodle_exception;
 defined('MOODLE_INTERNAL') || die;
 
 require_once($CFG->dirroot.'/grade/lib.php');
+require_once($CFG->dirroot.'/grade/report/grader/lib.php');
 require_once($CFG->dirroot.'/grade/report/user/lib.php');
 
 /**
@@ -163,5 +164,72 @@ class manage_grade_report {
         }
 
         return $usergradesreport;
+    }
+
+    /**
+     * Get course grade items of a category
+     *
+     * @param int $idcategory
+     * @return array $$coursesitemsreport
+     * @since Moodle 3.10
+     */
+    public function get_course_items($idcategory) {
+
+        global $DB;
+
+        $coursesitemsreport = array();
+
+        $courses = $DB->get_records('course', array('category' => $idcategory));
+
+        foreach ($courses as $course) {
+
+            $courseitemsreport = array();
+            $courseitemsreport['courseid'] = $course->id;
+            $courseitemsreport['fullname'] = $course->fullname;
+            $courseitemsreport['shortname'] = $course->shortname;
+            $courseitemsreport['idnumber'] = $course->idnumber;
+            $courseitemsreport['items'] = array();
+
+            $gpr = new \grade_plugin_return(
+                array(
+                    'type' => 'report',
+                    'plugin' => 'grader',
+                    'courseid' => $course->id
+                    )
+                );
+
+            $context = \context_course::instance($course->id);
+
+            $reportgrader = new \grade_report_grader($course->id, $gpr, $context);
+
+            $courseitemsraw = $reportgrader->gtree->top_element['children'];
+
+            foreach ($courseitemsraw as $courseitem) {
+                $itemreport = array();
+                $itemreport['itemid'] = $courseitem['object']->id;
+
+                $itemreport['itemtype'] = $courseitem['object']->itemtype;
+
+                $itemreport['iteminstance'] = $courseitem['object']->iteminstance;
+                $itemreport['grademax'] = $courseitem['object']->grademax;
+                $itemreport['grademin'] = $courseitem['object']->grademin;
+                $itemreport['gradepass'] = $courseitem['object']->gradepass;
+
+                if ($courseitem['object']->itemname
+                    && $courseitem['object']->itemmodule) {
+                    $itemreport['itemname'] = $courseitem['object']->itemname;
+                    $itemreport['itemmodule'] = $courseitem['object']->itemmodule;
+                } else {
+                    $itemreport['itemname'] = "Total del curso";
+                    $itemreport['itemmodule'] = "course";
+                }
+
+                array_push($courseitemsreport['items'], $itemreport);
+            }
+
+            array_push($coursesitemsreport, $courseitemsreport);
+        }
+
+        return $$coursesitemsreport;
     }
 }
