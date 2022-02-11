@@ -26,9 +26,15 @@
     }
 }}
 
+
 <div class="container">
-    <div class="row" id="row-icons-index">
-        <div class="col-6">
+
+    <div class="row box-reports" id="row-scheduled-reports">
+        <div class="col-12">
+            <h4>{{#str}}scheduled_reports, local_plantalentosuv{{/str}}</h4>
+        </div>
+
+        <div class="col-6 div-reports">
             <a href="{{urltoattendancereport}}" target="_blank">
                 <div class="col-12 text-center">
                     <img src="http://drive.google.com/uc?export=view&id=12W-J_so2r7v7E6lAL9beb8Hg2H6h4QhS" alt="Attendance icon">
@@ -39,7 +45,7 @@
                 </div>
             </a>
         </div>
-        <div class="col-6">
+        <div class="col-6 div-reports">
             <a href="{{urltogradesreport}}" target="_blank">
                 <div class="col-12 text-center">
                     <img src="http://drive.google.com/uc?export=view&id=1p3DvrL1DJ7U0zE9ApG4NpQc8LXhlklYn" alt="Grades icon">
@@ -51,10 +57,43 @@
             </a>
         </div>
     </div>
-    <div class="row" id="div-notes">
+
+
+    <div class="row box-reports" id="row-unscheduled-reports">
         <div class="col-12">
-            <strong>{{#str}}info, local_plantalentosuv{{/str}}</strong>
+            <h4>{{#str}}unscheduled_reports, local_plantalentosuv{{/str}}</h4>
         </div>
+        <div class="col-6 div-reports">
+            <h5>{{#str}}course_grade_items_report, local_plantalentosuv{{/str}}</h5>
+            <div class="col-12 div-reports">
+                <p>
+                {{#pix}} i/grades, core, {{#str}}generate_report, local_plantalentosuv{{/str}} }} {{/pix}} {{#str}}generate_report, local_plantalentosuv{{/str}}
+                </p>
+                <p>
+                {{#pix}} i/export, core, {{#str}}download_report, local_plantalentosuv{{/str}} }} {{/pix}} {{#str}}download_report, local_plantalentosuv{{/str}}
+                </p>
+            </div>
+        </div>
+
+        <div class="col-6 div-reports">
+            <h5 class="mb-1">{{#str}}course_grade_items_report, local_plantalentosuv{{/str}}</h5>
+            <div class="col-12 div-reports">
+                <p>
+                    {{#pix}} i/grades, core, {{#str}}generate_report, local_plantalentosuv{{/str}} }} {{/pix}} {{#str}}generate_report, local_plantalentosuv{{/str}}
+                </p>
+                <p>
+                    {{#pix}} i/export, core, {{#str}}download_report, local_plantalentosuv{{/str}} }} {{/pix}} {{#str}}download_report, local_plantalentosuv{{/str}}
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row box-reports" id="row-info">
+        <div class="col-12">
+            <h4>{{#str}}info, local_plantalentosuv{{/str}}</h4>
+        </div>
+
         <div class="col-12">
             {{filesinfilearea}}
         </div>
