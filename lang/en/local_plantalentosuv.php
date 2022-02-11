@@ -54,6 +54,12 @@ $string['download_attendance_report'] = 'Download attendance report';
 $string['download_grade_report'] = 'Download grade report';
 $string['counter_files'] = ' files are stored in the plugin file area.';
 $string['info'] = 'Information';
+$string['scheduled_reports'] = 'Unscheduled reports';
+$string['unscheduled_reports'] = 'Scheduled reports';
+$string['course_grade_items_report'] = 'Course grade items reports';
+$string['course_grade_items_report'] = 'Course grade items reports';
+$string['generate_report'] = 'Generate report';
+$string['download_report'] = 'Download report';
 
 // Settings.
 $string['generalsettingsheading'] = 'General settings';

@@ -54,6 +54,11 @@ $string['download_attendance_report'] = 'Descargar reporte de asistencias';
 $string['download_grade_report'] = 'Descargar reporte de calificaciones';
 $string['counter_files'] = ' archivos son almacenados en el área de archivos del plugin.';
 $string['info'] = 'Información';
+$string['scheduled_reports'] = 'Reportes de ejecución programada';
+$string['unscheduled_reports'] = 'Reportes de ejecución no programada';
+$string['course_grade_items_report'] = 'Reporte de ítems de calificación en los cursos';
+$string['generate_report'] = 'Generar reporte';
+$string['download_report'] = 'Descargar reporte';
 
 // Settings.
 $string['generalsettingsheading'] = 'Configuraciones generales';
