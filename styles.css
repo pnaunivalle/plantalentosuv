@@ -1,10 +1,14 @@
+#div-icon-attendance-report {
+    background-image: url([[pix:local_plantalentos|attendance]]);
+}
+
 #row-info {
     border: 1px solid #000;
     padding: 10px;
 }
 
 .legend-icons-index {
-    font-size: large;
+    font-size: medium;
 }
 
 .div-reports {

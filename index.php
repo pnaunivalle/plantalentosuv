@@ -77,6 +77,8 @@ $data->filesinfilearea = count($files).get_string('counter_files', 'local_planta
 
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
+$data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv');
+$data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
