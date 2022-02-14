@@ -59,7 +59,7 @@ $string['info'] = 'Information';
 $string['scheduled_reports'] = 'Unscheduled reports';
 $string['unscheduled_reports'] = 'Scheduled reports';
 $string['course_grade_items_report'] = 'Course grade items reports';
-$string['course_grade_items_report'] = 'Course grade items reports';
+$string['course_attendance_sessions_report'] = 'Course attendance sessions reports';
 $string['generate_report'] = 'Generate report';
 $string['download_report'] = 'Download report';
 

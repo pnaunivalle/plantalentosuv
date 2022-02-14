@@ -59,6 +59,7 @@ $string['info'] = 'Información';
 $string['scheduled_reports'] = 'Reportes de ejecución programada';
 $string['unscheduled_reports'] = 'Reportes de ejecución no programada';
 $string['course_grade_items_report'] = 'Reporte de ítems de calificación en los cursos';
+$string['course_attendance_sessions_report'] = 'Reporte de sesiones de asistencia en los cursos';
 $string['generate_report'] = 'Generar reporte';
 $string['download_report'] = 'Descargar reporte';
 
