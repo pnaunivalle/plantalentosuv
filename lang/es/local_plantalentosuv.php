@@ -51,7 +51,9 @@ $string['clean_plantalentosuv_filearea'] = 'Limpiar el área de archivos del plu
 
 // Index.
 $string['download_attendance_report'] = 'Descargar reporte de asistencias';
+$string['attendance_report_no_processed'] = 'El reporte de asistencias no ha sido procesado';
 $string['download_grade_report'] = 'Descargar reporte de calificaciones';
+$string['grades_report_no_processed'] = 'El reporte de calificaciones no ha sido procesado';
 $string['counter_files'] = ' archivos son almacenados en el área de archivos del plugin.';
 $string['info'] = 'Información';
 $string['scheduled_reports'] = 'Reportes de ejecución programada';

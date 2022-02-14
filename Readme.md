@@ -45,6 +45,9 @@ Los reportes retornados por el plugin son los siguientes:
 ##  Versiones
 
 ## Versión 202202XXX (v1.X.X-beta)
+- Se añade validación para saber si los reportes programados han sido creados o no
+- Se mejora la disposición de los iconos en el index
+- Se añade interfaz gráfica para descargar reportes no programados
 - Se corrige error en nombre de archivo del reporte de asistencias
 - Se corrigen permisos de acceso al plugin desde diferentes roles
 - Se corrige icono de acceso en la barra de navegación lateral
@@ -54,12 +57,10 @@ Los reportes retornados por el plugin son los siguientes:
 - Se añaden configuraciones del plugin para gestionar la carga de archivos a Google Drive.
 - Clase y métodos para cargar archivos a Google Drive.
 
-
 ## Versión 2022012602 (v0.3.0-alpha)
 - Tarea programada para limpiar el área de archivos del plugin.
 - Clase y métodos para gestionar el reporte de calificaciones.
 - Inclusión del reporte de calificaciones en la tarea programada para recuperar los reportes.
-
 
 ###  Versión 2021113000 (v0.2.0-alpha)
 - Control de acceso.

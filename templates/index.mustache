@@ -35,17 +35,32 @@
         </div>
 
         <div class="col-6 div-reports">
+            {{#urltoattendancereport}}
             <a href="{{urltoattendancereport}}" target="_blank">
                 <div class="col-12 text-center">
                     <img src="{{{imageattendance}}}" alt="Attendance icon">
                 </div>
                 <br>
                 <div class="col-12 text-center">
-                    <strong class="legend-icons-index">{{#str}}download_attendance_report, local_plantalentosuv{{/str}}</strong>
+                    <strong class="legend-icons-index">
+                        {{#str}}download_attendance_report, local_plantalentosuv{{/str}}
+                    </strong>
                 </div>
             </a>
+            {{/urltoattendancereport}}
+            {{^urltoattendancereport}}
+            <div class="col-12 text-center">
+                <img src="{{{imageattendance}}}" alt="Attendance icon">
+            </div>
+            <br>
+            <div class="col-12 text-center">
+                <img src="{{iconwarning}}" />
+                <strong class="legend-icons-index">{{#str}}attendance_report_no_processed, local_plantalentosuv{{/str}}</strong>
+            </div>
+            {{/urltoattendancereport}}
         </div>
         <div class="col-6 div-reports">
+            {{#urltogradesreport}}
             <a href="{{urltogradesreport}}" target="_blank">
                 <div class="col-12 text-center">
                     <img src="{{{imagegrades}}}" alt="Grades icon">
@@ -55,6 +70,17 @@
                     <strong class="legend-icons-index">{{#str}}download_grade_report, local_plantalentosuv{{/str}}</strong>
                 </div>
             </a>
+            {{/urltogradesreport}}
+            {{^urltogradesreport}}
+            <div class="col-12 text-center">
+                <img src="{{{imagegrades}}}" alt="Grades icon">
+            </div>
+            <br>
+            <div class="col-12 text-center">
+                <img src="{{iconwarning}}" />
+                <strong class="legend-icons-index">{{#str}}grades_report_no_processed, local_plantalentosuv{{/str}}</strong>
+            </div>
+            {{/urltogradesreport}}
         </div>
     </div>
 

@@ -27,22 +27,19 @@ require_once('../../config.php');
 require_login();
 
 $systemcontext = context_system::instance();
-$PAGE->set_context($systemcontext);
 
+// Validate access.
 $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
-
-// Validate params.
 $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
 $categoryid = $category->id;
-
 $categorycontext = context_coursecat::instance($categoryid);
 
 if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
     require_capability('local/plantalentosuv:viewreport', $categorycontext);
 }
 
-$data = new \stdClass();
-
+// Setings page.
+$PAGE->set_context($systemcontext);
 $PAGE->set_url(new moodle_url('/local/plantalentosuv/index.php'));
 $PAGE->set_title(get_string('pluginname', 'local_plantalentosuv'));
 $PAGE->set_heading(get_string('header_plantalentosuv', 'local_plantalentosuv'));
@@ -50,35 +47,53 @@ $PAGE->set_pagelayout('standard');
 
 $today = getdate();
 
-$attendancefilename = "attendancereport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
-$gradesfilename = "gradesreport_ptuv_".$today['mday']."_".$today['mon']."_".$today['year'].".json";
+// Validate files.
+$attendancefilename = "attendancereport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
+$gradesfilename = "gradesreport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
 
-$urltoattendancereport = moodle_url::make_pluginfile_url($systemcontext->id,
-                                                        'local_plantalentosuv',
-                                                        'plantalentosuvarea',
-                                                        0,
-                                                        '/',
+$filestorage = get_file_storage();
+$component = 'local_plantalentosuv';
+$filearea = 'plantalentosuvarea';
+$itemid = 0;
+$filepath = '/';
+
+$fileattendanceinfo = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $attendancefilename);
+$filegradesinfo = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $gradesfilename);
+
+if ($fileattendanceinfo) {
+    $urltoattendancereport = moodle_url::make_pluginfile_url($systemcontext->id,
+                                                        $component,
+                                                        $filearea,
+                                                        $itemid,
+                                                        $filepath,
                                                         $attendancefilename,
                                                         true);
+} else {
+    $urltoattendancereport = '';
+}
 
-$urltogradesreport = moodle_url::make_pluginfile_url($systemcontext->id,
-                                                        'local_plantalentosuv',
-                                                        'plantalentosuvarea',
-                                                        0,
-                                                        '/',
+if ($filegradesinfo) {
+    $urltogradesreport = moodle_url::make_pluginfile_url($systemcontext->id,
+                                                        $component,
+                                                        $filearea,
+                                                        $itemid,
+                                                        $filepath,
                                                         $gradesfilename,
                                                         true);
+} else {
+    $urltogradesreport = '';
+}
 
 // Get files in the filearea.
-$fs = get_file_storage();
-$files = $fs->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
+$files = $filestorage->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
 
+$data = new \stdClass();
 $data->filesinfilearea = count($files).get_string('counter_files', 'local_plantalentosuv');
-
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
 $data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv');
 $data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
+$data->iconwarning = $OUTPUT->image_url('i/warning', 'local_plantalentosuv');
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
