@@ -92,8 +92,11 @@
         <div class="col-6 div-reports">
             <h5>{{#str}}course_attendance_sessions_report, local_plantalentosuv{{/str}}</h5>
             <div class="col-12 div-reports">
-                <p>
-                {{#pix}} i/report, local_plantalentosuv, {{#str}}generate_report, local_plantalentosuv{{/str}} }} {{/pix}} {{#str}}generate_report, local_plantalentosuv{{/str}}
+                <p id="generate-report-attendace-sessions">
+                    {{#pix}} i/report, local_plantalentosuv,
+                            {{#str}}generate_report, local_plantalentosuv{{/str}}
+                    {{/pix}}
+                    {{#str}}generate_report, local_plantalentosuv{{/str}}
                 </p>
                 <p>
                 {{#pix}} i/import, local_plantalentosuv, {{#str}}download_report, local_plantalentosuv{{/str}} }} {{/pix}} {{#str}}download_report, local_plantalentosuv{{/str}}
@@ -104,21 +107,25 @@
         <div class="col-6 div-reports">
             <h5>{{#str}}course_grade_items_report, local_plantalentosuv{{/str}}</h5>
             <div class="col-12 div-reports">
-                <p>
+                <p id="generate-report-grade-items">
                     {{#pix}} i/report,
                             local_plantalentosuv,
-                            {{#str}}generate_report, local_plantalentosuv{{/str}} }}
+                            {{#str}}generate_report, local_plantalentosuv{{/str}}
                     {{/pix}}
                     {{#str}}generate_report, local_plantalentosuv{{/str}}
                 </p>
-                <p>
-                    {{#pix}} i/import,
-                            local_plantalentosuv,
-                            {{#str}}download_report,
-                            local_plantalentosuv{{/str}} }}
-                    {{/pix}}
-                    {{#str}}download_report, local_plantalentosuv{{/str}}
-                </p>
+                {{#urltoitemsbycoursereport}}
+                    <a href="{{urltoitemsbycoursereport}}" target="_blank">
+                        <p>
+                            {{#pix}} i/import,
+                                    local_plantalentosuv,
+                                    {{#str}}download_report,
+                                    local_plantalentosuv{{/str}}
+                            {{/pix}}
+                            {{#str}}download_report, local_plantalentosuv{{/str}}
+                        </p>
+                    </a>
+                {{/urltoitemsbycoursereport}}
             </div>
 
         </div>

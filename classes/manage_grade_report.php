@@ -230,6 +230,6 @@ class manage_grade_report {
             array_push($coursesitemsreport, $courseitemsreport);
         }
 
-        return $$coursesitemsreport;
+        return $coursesitemsreport;
     }
 }

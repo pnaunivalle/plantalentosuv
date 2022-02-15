@@ -44,12 +44,14 @@ $PAGE->set_url(new moodle_url('/local/plantalentosuv/index.php'));
 $PAGE->set_title(get_string('pluginname', 'local_plantalentosuv'));
 $PAGE->set_heading(get_string('header_plantalentosuv', 'local_plantalentosuv'));
 $PAGE->set_pagelayout('standard');
+$PAGE->requires->js_call_amd('local_plantalentosuv/get_unscheduled_reports', 'init');
 
 $today = getdate();
 
 // Validate files.
 $attendancefilename = "attendancereport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
 $gradesfilename = "gradesreport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
+$itemsbycoursefilename = "itemsbycoursereport_ptuv.json";
 
 $filestorage = get_file_storage();
 $component = 'local_plantalentosuv';
@@ -59,6 +61,7 @@ $filepath = '/';
 
 $fileattendanceinfo = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $attendancefilename);
 $filegradesinfo = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $gradesfilename);
+$fileitemsbycourse = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $itemsbycoursefilename);
 
 if ($fileattendanceinfo) {
     $urltoattendancereport = moodle_url::make_pluginfile_url($systemcontext->id,
@@ -84,6 +87,18 @@ if ($filegradesinfo) {
     $urltogradesreport = '';
 }
 
+if ($fileitemsbycourse) {
+    $urltoitemsbycoursereport = moodle_url::make_pluginfile_url($systemcontext->id,
+                                                        $component,
+                                                        $filearea,
+                                                        $itemid,
+                                                        $filepath,
+                                                        $itemsbycoursefilename,
+                                                        true);
+} else {
+    $urltoitemsbycoursereport = '';
+}
+
 // Get files in the filearea.
 $files = $filestorage->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
 
@@ -91,6 +106,7 @@ $data = new \stdClass();
 $data->filesinfilearea = count($files).get_string('counter_files', 'local_plantalentosuv');
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
+$data->urltoitemsbycoursereport = $urltoitemsbycoursereport;
 $data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv');
 $data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
 $data->iconwarning = $OUTPUT->image_url('i/warning', 'local_plantalentosuv');
