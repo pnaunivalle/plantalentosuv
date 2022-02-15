@@ -70,7 +70,21 @@ $string['googleapiheading'] = 'Google API';
 $string['googleapiheading_desc'] = 'Google API credentials for upload files to Google Drive.';
 $string['uploadtogoogledrive'] = 'Upload files to Google Drive';
 $string['uploadtogoogledrive_desc'] = 'If the checkbox is active, the files will be automatically uploaded to Google Drive';
+$string['externalserverheading'] = 'External server';
+$string['externalserverheading_desc'] = 'External server FTP settings';
 $string['jsonkey'] = 'JSON key';
 $string['jsonkey_desc'] = 'JSON key obtained from Google services app';
 $string['jsonpath'] = 'JSON path';
 $string['jsonpath_desc'] = 'JSON path obtained from Google services app';
+$string['uploadtoexternalserver'] = 'Upload files to an external server';
+$string['uploadtoexternalserver_desc'] = 'If the checkbox is active, the files will be automatically uploaded to an external server';
+$string['ftpusername'] = 'FTP username';
+$string['ftpusername_desc'] = 'FTP username';
+$string['ftpserver'] = 'FTP server';
+$string['ftpserver_desc'] = 'FTP server';
+$string['ftpport'] = 'FTP port';
+$string['ftpport_desc'] = 'FTP port';
+$string['ftppassword'] = 'FTP password';
+$string['ftppassword_desc'] = 'FTP password';
+
+

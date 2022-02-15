@@ -90,6 +90,50 @@ if ($hassiteconfig) {
             PARAM_TEXT
         ));
 
+        // External server settings.
+        $settingspage->add(new admin_setting_heading(
+            'externalserverheading',
+            new lang_string('externalserverheading', 'local_plantalentosuv'),
+            new lang_string('externalserverheading_desc', 'local_plantalentosuv')));
+
+        $settingspage->add(new admin_setting_configcheckbox(
+            'local_plantalentosuv/uploadtoexternalserver',
+            new lang_string('uploadtoexternalserver', 'local_plantalentosuv'),
+            new lang_string('uploadtoexternalserver_desc', 'local_plantalentosuv'),
+            1
+        ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/ftpusername',
+            new lang_string('ftpusername', 'local_plantalentosuv'),
+            new lang_string('ftpusername_desc', 'local_plantalentosuv'),
+            'username',
+            PARAM_TEXT
+        ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/ftpserver',
+            new lang_string('ftpserver', 'local_plantalentosuv'),
+            new lang_string('ftpserver_desc', 'local_plantalentosuv'),
+            'example.com.co',
+            PARAM_TEXT
+        ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/ftpport',
+            new lang_string('ftpport', 'local_plantalentosuv'),
+            new lang_string('ftpport_desc', 'local_plantalentosuv'),
+            '21',
+            PARAM_TEXT
+        ));
+
+        $settingspage->add(new admin_setting_configtext(
+            'local_plantalentosuv/ftppassword',
+            new lang_string('ftppassword', 'local_plantalentosuv'),
+            new lang_string('ftppassword_desc', 'local_plantalentosuv'),
+            'yourpasswordhere',
+            PARAM_TEXT
+        ));
     }
 
     $ADMIN->add('localplugins', $settingspage);
