@@ -179,7 +179,12 @@ class manage_grade_report {
 
         $coursesitemsreport = array();
 
-        $courses = $DB->get_records('course', array('category' => $idcategory));
+        $sqlquery = "SELECT c.id, c.fullname, c.shortname, c.idnumber, c.category, cc.name as categoryname
+                    FROM {course} c
+                         INNER JOIN {course_categories} cc ON cc.id = c.category
+                    WHERE cc.parent = ?";
+
+        $courses = $DB->get_records_sql($sqlquery, array($idcategory));
 
         foreach ($courses as $course) {
 
