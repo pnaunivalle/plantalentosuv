@@ -160,4 +160,87 @@ class manage_attendance {
 
         return $userattendances;
     }
+
+    /**
+     * Get course sessions
+     *
+     * @param  int $idcategory
+     * @return array $coursesessions
+     * @since Moodle 3.10
+     */
+    public function get_course_sessions($idcategory) {
+
+        global $DB;
+
+        $coursessessionsreport = array();
+
+        $sqlquery = "SELECT c.id, c.fullname, c.shortname, c.idnumber, c.category, cc.name
+                    FROM {course} c
+                         INNER JOIN {course_categories} cc ON cc.id = c.category
+                    WHERE cc.parent = ?";
+
+        $courses = $DB->get_records_sql($sqlquery, array($idcategory));
+
+        if (!$courses) {
+
+            list($csql, $params) = $DB->get_in_or_equal(array_keys($courses), SQL_PARAMS_NAMED, 'cid0');
+
+            $sqlquery = "SELECT att.id as attid,
+                                att.course as courseid,
+                                course.fullname as coursefullname,
+                                course.shortname as courseshortname,
+                                course.startdate as coursestartdate,
+                                att.name as attname,
+                                att.grade as attgrade
+                        FROM {attendance} att
+                        JOIN {course} course
+                            ON att.course = course.id
+                        WHERE att.course $csql
+                        ORDER BY coursefullname ASC, attname ASC";
+
+            $courseattendanceactivities = $DB->get_records_sql($sqlquery, $params);
+
+            foreach ($courseattendanceactivities as $attendanceactivity) {
+                if (!empty($attendanceactivity)) {
+
+                    // Data for sessions report.
+                    $cm = get_coursemodule_from_instance('attendance', $attendanceactivity->attid, 0, false, MUST_EXIST);
+                    $attendancerecord = $DB->get_record('attendance', array('id' => $attendanceactivity->attid), '*', MUST_EXIST);
+                    $courserecord = $DB->get_record('course', array('id' => $attendanceactivity->courseid), '*', MUST_EXIST);
+                    $context = \context_module::instance($cm->id);
+
+                    $pageparams = new \mod_attendance_view_page_params();
+
+                    $pageparams->edit = -1;
+                    $pageparams->mode = 2;
+                    $pageparams->view = 5;
+                    $pageparams->curdate = $courserecord->startdate;
+                    $pageparams->groupby = null;
+                    $pageparams->sesscourses = null;
+
+                    $pageparams->init($cm);
+
+                    $attendancestructure = new \mod_attendance_structure($attendancerecord, $cm, $courserecord, $context, $pageparams);
+
+                    $attendancestructure->get_filtered_sessions();
+                }
+            }
+
+            return $coursessessionsreport;
+        }
+
+        // foreach ($courses as $course) {
+
+        //     $sessionsreport = array();
+        //     $sessionsreport['courseid'] = $course->id;
+        //     $sessionsreport['fullname'] = $course->fullname;
+        //     $sessionsreport['shortname'] = $course->shortname;
+        //     $sessionsreport['idnumber'] = $course->idnumber;
+        //     $sessionsreport['idcategory'] = $course->category;
+        //     $sessionsreport['categoryname'] = $course->idnumber;
+        //     $sessionsreport['sessions'] = array();
+
+        // }
+
+    }
 }
