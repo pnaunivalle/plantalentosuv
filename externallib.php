@@ -49,7 +49,7 @@ class local_plantalentosuv_external extends external_api {
     }
 
     /**
-     * get_grade_items_by_course
+     * Get grade items by course
      *
      * @param  int $idcategory
      * @return JSON with grade items by course
@@ -122,4 +122,38 @@ class local_plantalentosuv_external extends external_api {
         ));
     }
 
+    /**
+     * Returns the description of the external function parameters.
+     *
+     * @return external_function_parameters
+     * @since Moodle 3.10
+     */
+    public static function get_attendance_sessions_by_course_parameters() {
+        return new external_function_parameters(
+            array(
+            )
+        );
+    }
+
+    /**
+     * Get attendance sessions by course
+     *
+     * @param  int $idcategory
+     * @return JSON with grade items by course
+     */
+    public static function get_attendance_sessions_by_course() {
+    }
+
+    /**
+     * Returns the description of the external function get grade items by course return value.
+     *
+     * @return external_description
+     * @since Moodle 3.10
+     */
+    public static function get_attendance_sessions_by_course_returns() {
+        return new external_single_structure(array(
+            'result' => new external_value(PARAM_INT, 'Result of report creation'),
+            'warnings' => new external_warnings()
+        ));
+    }
 }
