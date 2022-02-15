@@ -44,7 +44,9 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
-## Versión 202202XXX (v1.X.X-beta)
+## Versión 2022021501 (v1.1.0-beta)
+- Se añade servicio para recuperar las sesiones de asistencia por cada curso
+- Se modifican consultas para retornar información de cursos de las categorías hijas
 - Se añade servicio para recuperar la estructura de los ítems de calificación de cada curso
 - Se añade validación para saber si los reportes programados han sido creados o no
 - Se mejora la disposición de los iconos en el index
