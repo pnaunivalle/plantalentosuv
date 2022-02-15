@@ -37,8 +37,37 @@ define(
                       .done(function(modal) {
                         modal.show();
                       });
-
                     });
+                });
+
+                $('#generate-report-attendace-sessions').on('click', function() {
+
+                  var promiseGetSessionsByCourse = ajax.call([{
+                    methodname: 'local_plantalentosuv_get_course_attendance_sessions',
+                    args: {
+                    }
+                  }]);
+
+                  promiseGetSessionsByCourse[0].done(function(response) {
+
+                    var modalbody = "";
+
+                    if (response.result) {
+                      modalbody = "Reporte generado éxitosamente.";
+                    } else {
+                      modalbody = "El reporte no fue generado.";
+                    }
+
+                    ModalFactory.create({
+                      title: 'Éxito',
+                      body: modalbody,
+                      footer: '',
+                    })
+                    .done(function(modal) {
+                      modal.show();
+                    });
+                  });
+
                 });
               });
             }
