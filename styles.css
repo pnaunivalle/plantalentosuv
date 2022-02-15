@@ -7,12 +7,12 @@
     padding: 10px;
 }
 
-#generate-report-grade-items {
+.generate-reports {
     cursor: pointer;
     color: #cd1f32;
 }
 
-#generate-report-grade-items:hover {
+.generate-reports:hover {
     color: #ca3120;
     text-decoration: underline #ca3120;
 }
