@@ -172,16 +172,18 @@ class manage_attendance {
 
         global $DB;
 
+        date_default_timezone_set('America/Bogota');
+
         $coursessessionsreport = array();
 
-        $sqlquery = "SELECT c.id, c.fullname, c.shortname, c.idnumber, c.category, cc.name
+        $sqlquery = "SELECT c.id, c.fullname, c.shortname, c.idnumber, c.category, cc.name as categoryname
                     FROM {course} c
                          INNER JOIN {course_categories} cc ON cc.id = c.category
                     WHERE cc.parent = ?";
 
         $courses = $DB->get_records_sql($sqlquery, array($idcategory));
 
-        if (!$courses) {
+        if ($courses) {
 
             list($csql, $params) = $DB->get_in_or_equal(array_keys($courses), SQL_PARAMS_NAMED, 'cid0');
 
@@ -220,27 +222,42 @@ class manage_attendance {
 
                     $pageparams->init($cm);
 
-                    $attendancestructure = new \mod_attendance_structure($attendancerecord, $cm, $courserecord, $context, $pageparams);
+                    $attendancestructure = new \mod_attendance_structure($attendancerecord,
+                                                                        $cm,
+                                                                        $courserecord,
+                                                                        $context,
+                                                                        $pageparams);
 
-                    $attendancestructure->get_filtered_sessions();
+                    $sessionsraw = $attendancestructure->get_filtered_sessions();
+
+                    $sessionsreport = array();
+                    $sessionsreport['courseid'] = $courserecord->id;
+                    $sessionsreport['fullname'] = $courserecord->fullname;
+                    $sessionsreport['shortname'] = $courserecord->shortname;
+                    $sessionsreport['idnumber'] = $courserecord->idnumber;
+                    $sessionsreport['idcategory'] = $courserecord->category;;
+                    $sessionsreport['sessions'] = array();
+
+                    foreach ($sessionsraw as $sessionraw) {
+
+                        $sessioninfo = $attendancestructure->get_session_info($sessionraw->id);
+
+                        $session = array();
+                        $session['id'] = $sessionraw->id;
+                        $session['sesstimestamp'] = $sessioninfo->sessdate;
+                        $session['sessdate'] = date('d-m-Y H:i:s', $sessioninfo->sessdate);
+                        $session['duration'] = $sessioninfo->duration;
+                        $session['description'] = $sessioninfo->description;
+                        $session['sessiondate'] = $sessioninfo->sessdate;
+
+                        array_push($sessionsreport['sessions'], $session);
+                    }
+
+                    array_push($coursessessionsreport, $sessionsreport);
                 }
             }
 
             return $coursessessionsreport;
         }
-
-        // foreach ($courses as $course) {
-
-        //     $sessionsreport = array();
-        //     $sessionsreport['courseid'] = $course->id;
-        //     $sessionsreport['fullname'] = $course->fullname;
-        //     $sessionsreport['shortname'] = $course->shortname;
-        //     $sessionsreport['idnumber'] = $course->idnumber;
-        //     $sessionsreport['idcategory'] = $course->category;
-        //     $sessionsreport['categoryname'] = $course->idnumber;
-        //     $sessionsreport['sessions'] = array();
-
-        // }
-
     }
 }
