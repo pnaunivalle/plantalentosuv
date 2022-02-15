@@ -36,30 +36,32 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
 
     $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
 
-    // Validate params.
-    $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+    if ($categoryidnumber) {
+        // Validate params.
+        $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
 
-    $categorycontext = context_coursecat::instance($category->id);
+        $categorycontext = context_coursecat::instance($category->id);
 
-    $hasmaintenanceaccess = has_capability('moodle/site:maintenanceaccess', context_system::instance());
-    $hasviewreportaccess = has_capability('local/plantalentosuv:viewreport', $categorycontext);
+        $hasmaintenanceaccess = has_capability('moodle/site:maintenanceaccess', context_system::instance());
+        $hasviewreportaccess = has_capability('local/plantalentosuv:viewreport', $categorycontext);
 
-    if (!$hasmaintenanceaccess
-        && get_config('local_plantalentosuv', 'showinnavigation')
-        && $hasviewreportaccess) {
+        if (!$hasmaintenanceaccess
+            && get_config('local_plantalentosuv', 'showinnavigation')
+            && $hasviewreportaccess) {
 
-        $node = navigation_node::create(
-            get_string('pluginname', 'local_plantalentosuv'),
-            new moodle_url('/local/plantalentosuv/index.php'),
-            navigation_node::TYPE_SYSTEM,
-            'plantalentosuv',
-            'plantalentosuv',
-            new pix_icon('i/report', 'local_plantalentosuv')
-        );
+            $node = navigation_node::create(
+                get_string('pluginname', 'local_plantalentosuv'),
+                new moodle_url('/local/plantalentosuv/index.php'),
+                navigation_node::TYPE_SYSTEM,
+                'plantalentosuv',
+                'plantalentosuv',
+                new pix_icon('i/report', 'local_plantalentosuv')
+            );
 
-        $node->showinflatnavigation = true;
+            $node->showinflatnavigation = true;
 
-        $root->add_node($node, 'calendar');
+            $root->add_node($node, 'calendar');
+        }
     }
 }
 
