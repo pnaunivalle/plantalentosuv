@@ -66,8 +66,7 @@ class local_plantalentosuv_external extends external_api {
         $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
         $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
 
-        $itemsbycourse = json_encode($managergradereport->get_course_items($category->id));
-        $itemsbycoursejson = json_encode($itemsbycourse, JSON_UNESCAPED_UNICODE);
+        $itemsbycourse = json_encode($managergradereport->get_course_items($category->id), JSON_UNESCAPED_UNICODE);
 
         // Prepare file record object.
 
@@ -95,7 +94,7 @@ class local_plantalentosuv_external extends external_api {
             'filename' => $filename);
 
         // Create and storage file.
-        $reportfile = $filestorage->create_file_from_string($fileinfo, $itemsbycoursejson);
+        $reportfile = $filestorage->create_file_from_string($fileinfo, $itemsbycourse);
 
         if ($reportfile) {
             $result = 1;
@@ -142,6 +141,55 @@ class local_plantalentosuv_external extends external_api {
      * @return JSON with grade items by course
      */
     public static function get_attendance_sessions_by_course() {
+
+        global $DB;
+
+        $result = 0;
+
+        $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+        $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+
+        $managerattendance = new \local_plantalentosuv\manage_attendance();
+        $sessionsreport = json_encode($managerattendance->get_course_sessions($category->id), JSON_UNESCAPED_UNICODE);
+
+        // Prepare file record object.
+
+        $context = \context_system::instance();
+
+        $filename = "sessionsbycoursereport_ptuv.json";
+        $filestorage = get_file_storage();
+        $component = 'local_plantalentosuv';
+        $filearea = 'plantalentosuvarea';
+        $itemid = 0;
+        $filepath = '/';
+
+        $reportfile = $filestorage->get_file($context->id, $component, $filearea, $itemid, $filepath, $filename);
+
+        if ($reportfile) {
+            $reportfile->delete();
+        }
+
+        $fileinfo = array(
+            'contextid' => $context->id,
+            'component' => 'local_plantalentosuv',
+            'filearea' => 'plantalentosuvarea',
+            'itemid' => 0,
+            'filepath' => '/',
+            'filename' => $filename);
+
+        // Create and storage file.
+        $reportfile = $filestorage->create_file_from_string($fileinfo, $sessionsreport);
+
+        if ($reportfile) {
+            $result = 1;
+        }
+
+        $arrayresult = array(
+            'result' => $result,
+            'warnings' => []
+        );
+
+        return $arrayresult;
     }
 
     /**
