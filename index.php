@@ -52,6 +52,7 @@ $today = getdate();
 $attendancefilename = "attendancereport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
 $gradesfilename = "gradesreport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
 $itemsbycoursefilename = "itemsbycoursereport_ptuv.json";
+$sessionsbycoursefilename = "sessionsbycoursereport_ptuv.json";
 
 $filestorage = get_file_storage();
 $component = 'local_plantalentosuv';
@@ -62,6 +63,8 @@ $filepath = '/';
 $fileattendanceinfo = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $attendancefilename);
 $filegradesinfo = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $gradesfilename);
 $fileitemsbycourse = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid, $filepath, $itemsbycoursefilename);
+$filesessionsbycourse = $filestorage->get_file($systemcontext->id, $component, $filearea, $itemid,
+                                                $filepath, $sessionsbycoursefilename);
 
 if ($fileattendanceinfo) {
     $urltoattendancereport = moodle_url::make_pluginfile_url($systemcontext->id,
@@ -99,6 +102,18 @@ if ($fileitemsbycourse) {
     $urltoitemsbycoursereport = '';
 }
 
+if ($filesessionsbycourse) {
+    $urltosessionsreport = moodle_url::make_pluginfile_url($systemcontext->id,
+                                                        $component,
+                                                        $filearea,
+                                                        $itemid,
+                                                        $filepath,
+                                                        $sessionsbycoursefilename,
+                                                        true);
+} else {
+    $urltosessionsreport = '';
+}
+
 // Get files in the filearea.
 $files = $filestorage->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
 
@@ -107,6 +122,7 @@ $data->filesinfilearea = count($files).get_string('counter_files', 'local_planta
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
 $data->urltoitemsbycoursereport = $urltoitemsbycoursereport;
+$data->urltosessionsreport = $urltosessionsreport;
 $data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv');
 $data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
 $data->iconwarning = $OUTPUT->image_url('i/warning', 'local_plantalentosuv');
