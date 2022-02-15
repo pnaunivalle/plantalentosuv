@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_plantalentosuv';
-$plugin->version = 2022021401;
+$plugin->version = 2022021501;
 $plugin->requires = 2020110908;
 $plugin->maturity = 'MATURITY_ALPHA';
 $plugin->dependencies = array(
