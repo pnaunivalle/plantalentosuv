@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die;
 $functions = array(
     'local_plantalentosuv_get_course_attendance_sessions' => array(
         'classname'          => 'local_plantalentosuv_external',
-        'methodname'         => 'get_course_attendance_sessions',
+        'methodname'         => 'get_attendance_sessions_by_course',
         'description'        => 'Get course attendance sessions.',
         'requiredcapability' => 'local/plantalentosuv:view_report',
         'type'               => 'read',
