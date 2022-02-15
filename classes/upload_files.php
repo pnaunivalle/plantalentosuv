@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/local/plantalentosuv/googleapi/vendor/autoload.ph
  * @copyright 2021 Plan Talentos Universidad del Valle
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class upload_files_google_drive {
+class upload_files {
 
     /**
      * Function to upload files to Google Drive.
@@ -48,7 +48,7 @@ class upload_files_google_drive {
      * @return bool   $result
      * @since  Moodle3.10
      */
-    public function upload_file ($filename, $mimetype, $filecontent, $description) {
+    public function upload_file_google_drive ($filename, $mimetype, $filecontent, $description) {
 
         global $CFG;
 
@@ -80,6 +80,20 @@ class upload_files_google_drive {
         if ($fileuploaded) {
             $result = true;
         }
+
+        return $result;
+    }
+
+    /**
+     * upload_file_external_server
+     *
+     * @param  string $filecontent
+     * @return int $result
+     * @since Moodle 3.10
+     */
+    public function upload_file_external_server ($filecontent) {
+
+        $result = false;
 
         return $result;
     }

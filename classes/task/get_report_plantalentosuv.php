@@ -57,6 +57,8 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         $timenow = time();
         $starttime = microtime();
 
+        $managerupload = new \local_plantalentosuv\upload_files();
+
         mtrace("Update cron started at: " . date('r', $timenow) . "\n");
 
         $cohortidnumber = get_config('local_plantalentosuv', 'cohorttotrack');
@@ -101,9 +103,10 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             mtrace("Attendance report file created successfully named ".$attendancefilename);
 
             // Upload file attendance report to Google Drive.
-            $managerupload = new \local_plantalentosuv\upload_files_google_drive();
+
             $filedescription = "Attendance report created on ".date("d")."_".date("m")."_".date("Y");
-            $managerupload->upload_file($attendancefilename, 'application/json', $userattendancejson, $filedescription);
+            $managerupload->upload_file_google_drive($attendancefilename, 'application/json',
+                                                    $userattendancejson, $filedescription);
         }
 
         // Get grade report.
@@ -133,9 +136,9 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
 
             mtrace("Grades report file created successfully named ".$gradesfilename);
 
-            $managerupload = new \local_plantalentosuv\upload_files_google_drive();
             $filedescription = "Grades report created on ".date("d")."_".date("m")."_".date("Y");
-            $resultupload = $managerupload->upload_file($gradesfilename, 'application/json', $usergradesjson, $filedescription);
+            $resultupload = $managerupload->upload_file_google_drive($gradesfilename, 'application/json',
+                                                                    $usergradesjson, $filedescription);
         }
 
         // Update courses process completed.
