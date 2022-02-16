@@ -62,6 +62,9 @@ $string['course_grade_items_report'] = 'Reporte de ítems de calificación en lo
 $string['course_attendance_sessions_report'] = 'Reporte de sesiones de asistencia en los cursos';
 $string['generate_report'] = 'Generar reporte';
 $string['download_report'] = 'Descargar reporte';
+$string['filename'] = 'Nombre del archivo';
+$string['filetype'] = 'Tipo';
+$string['filesize'] = 'Tamaño';
 
 // Settings.
 $string['generalsettingsheading'] = 'Configuraciones generales';

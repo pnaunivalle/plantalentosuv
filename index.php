@@ -23,6 +23,7 @@
  */
 
 require_once('../../config.php');
+require_once(dirname(__FILE__).'/lib.php');
 
 require_login();
 
@@ -116,6 +117,7 @@ if ($filesessionsbycourse) {
 
 // Get files in the filearea.
 $files = $filestorage->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
+$htmllistsfiles = local_plantalentosuv_list_files_html($files);
 
 $data = new \stdClass();
 $data->filesinfilearea = count($files).get_string('counter_files', 'local_plantalentosuv');
@@ -126,6 +128,7 @@ $data->urltosessionsreport = $urltosessionsreport;
 $data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv');
 $data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
 $data->iconwarning = $OUTPUT->image_url('i/warning', 'local_plantalentosuv');
+$data->htmllistsfiles = $htmllistsfiles;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);

@@ -44,6 +44,10 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
+## Versión 2022021601 (v1.3.0-beta)
+- Se listan en el index los archivos en el área de archivos del Plugin con su nombre, tamaño y tipo
+- Recarga la página al generar un nuevo reporte no programado
+
 ## Versión 2022021502 (v1.2.0-beta)
 - Carga automática de archivos de reportes programados a servidor externo
 - Configuraciones para cargar archivos a servidor externo

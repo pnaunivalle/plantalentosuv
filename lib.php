@@ -106,3 +106,46 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
+/**
+ * local_plantalentosuv_list_files_html
+ *
+ * @param stored_file[] $files
+ * @return string $htmlfiles
+ */
+function local_plantalentosuv_list_files_html($files) {
+
+    $htmlfiles = "<div class='row' id='row-table-files'>";
+    $htmlfiles .= "<div class='col-4 offset-4'>";
+    $htmlfiles .= "<table class='table'>";
+    $htmlfiles .= "<thead>";
+    $htmlfiles .= "<tr>";
+    $htmlfiles .= "<th scope='col'> Nombre del archivo";
+    $htmlfiles .= "<th scope='col'> Tamaño";
+    $htmlfiles .= "</th>";
+    $htmlfiles .= "<th scope='col'>Tipo";
+    $htmlfiles .= "</th>";
+    $htmlfiles .= "</tr>";
+    $htmlfiles .= "</thead>";
+    $htmlfiles .= "<tbody>";
+
+    foreach ($files as $file) {
+
+        $filename = $file->get_filename();
+        $filesize = $file->get_filesize() / 1000;
+        $filemimetype = $file->get_mimetype();
+
+        $htmlfiles .= "<tr>";
+        $htmlfiles .= "<td>".$filename."</td>";
+        $htmlfiles .= "<td>".$filesize." kB</td>";
+        $htmlfiles .= "<td>".$filemimetype."</td>";
+        $htmlfiles .= "</tr>";
+    }
+
+    $htmlfiles .= "</tbody>";
+    $htmlfiles .= "</table>";
+    $htmlfiles .= "</div>";
+    $htmlfiles .= "</div>";
+
+    return $htmlfiles;
+}
+

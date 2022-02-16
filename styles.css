@@ -7,6 +7,10 @@
     padding: 10px;
 }
 
+#row-table-files {
+    margin-top: 30px;
+}
+
 .generate-reports {
     cursor: pointer;
     color: #cd1f32;

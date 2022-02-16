@@ -62,6 +62,9 @@ $string['course_grade_items_report'] = 'Course grade items reports';
 $string['course_attendance_sessions_report'] = 'Course attendance sessions reports';
 $string['generate_report'] = 'Generate report';
 $string['download_report'] = 'Download report';
+$string['filename'] = 'File name';
+$string['filetype'] = 'Type';
+$string['filesize'] = 'Size';
 
 // Settings.
 $string['generalsettingsheading'] = 'General settings';
