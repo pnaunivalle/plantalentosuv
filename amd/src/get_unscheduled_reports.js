@@ -2,10 +2,20 @@ define(
     [
       'jquery',
       'core/ajax',
-      'core/modal_factory'
+      'core/modal_factory',
+      'core/modal_events'
     ],
-    function($, ajax, ModalFactory) {
+    function($, ajax, ModalFactory, ModalEvents) {
         /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+
+        /**
+         * Callback for modals
+         * @param {Event} e
+         */
+        function modalcallback(e) {
+          e.preventDefault();
+          location.reload(true);
+        }
 
         return {
             init: function() {
@@ -31,11 +41,11 @@ define(
 
                       ModalFactory.create({
                         title: 'Éxito',
-                        body: modalbody,
-                        footer: '',
+                        body: modalbody
                       })
                       .done(function(modal) {
                         modal.show();
+                        modal.getRoot().on(ModalEvents.hidden, modalcallback);
                       });
                     });
                 });
@@ -60,11 +70,11 @@ define(
 
                     ModalFactory.create({
                       title: 'Éxito',
-                      body: modalbody,
-                      footer: '',
+                      body: modalbody
                     })
                     .done(function(modal) {
                       modal.show();
+                      modal.getRoot().on(ModalEvents.hidden, modalcallback);
                     });
                   });
 
