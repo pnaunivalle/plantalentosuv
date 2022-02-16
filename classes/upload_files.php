@@ -87,13 +87,36 @@ class upload_files {
     /**
      * upload_file_external_server
      *
-     * @param  string $filecontent
+     * @param  resource $file
      * @return int $result
      * @since Moodle 3.10
      */
-    public function upload_file_external_server ($filecontent) {
+    public function upload_file_external_server ($file, $filename) {
 
-        $result = false;
+        $result = 0;
+
+        // Credential variables.
+        $ftpusername = get_config('local_plantalentosuv', 'ftpusername');
+        $ftpserver = get_config('local_plantalentosuv', 'ftpserver');
+        $ftpport = get_config('local_plantalentosuv', 'ftpport');
+        $ftppassword = get_config('local_plantalentosuv', 'ftppassword');
+        $pathtodestiny = "/reportesmoodle/".$filename;
+
+        $connection = ftp_connect($ftpserver, $ftpport);
+
+        $login = ftp_login($connection, $ftpusername, $ftppassword);
+
+        if (!$connection || !$login) {
+            $result = 1;
+        }
+
+        $upload = ftp_fput($connection, $pathtodestiny, $file, FTP_ASCII);
+
+        if (!$upload) {
+            $result = 2;
+        }
+
+        ftp_close($connection);
 
         return $result;
     }
