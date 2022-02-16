@@ -44,7 +44,7 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
-## Versión 2022021501 (v1.2.0-beta)
+## Versión 2022021502 (v1.2.0-beta)
 - Carga automática de archivos de reportes programados a servidor externo
 - Configuraciones para cargar archivos a servidor externo
 - Modificacion de la clase upload_files_google_drive
