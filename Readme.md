@@ -44,6 +44,11 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
+## Versión 2022021501 (v1.2.0-beta)
+- Carga automática de archivos de reportes programados a servidor externo
+- Configuraciones para cargar archivos a servidor externo
+- Modificacion de la clase upload_files_google_drive
+
 ## Versión 2022021501 (v1.1.0-beta)
 - Se añade servicio para recuperar las sesiones de asistencia por cada curso
 - Se modifican consultas para retornar información de cursos de las categorías hijas
