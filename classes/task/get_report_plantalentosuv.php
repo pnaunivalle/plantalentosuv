@@ -109,6 +109,9 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
                                                     $userattendancejson, $filedescription);
         }
 
+        // Upload file attendace report to external server.
+        $managerupload->upload_file_external_server($attendancefile->get_content_file_handle(), $attendancefilename);
+
         // Get grade report.
         $managergradereport = new \local_plantalentosuv\manage_grade_report();
 
@@ -140,6 +143,9 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             $resultupload = $managerupload->upload_file_google_drive($gradesfilename, 'application/json',
                                                                     $usergradesjson, $filedescription);
         }
+
+        // Upload file attendace report to external server.
+        $managerupload->upload_file_external_server($gradesfile->get_content_file_handle(), $gradesfilename);
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");
