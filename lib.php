@@ -114,9 +114,21 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
  */
 function local_plantalentosuv_list_files_html($files) {
 
+    $table = new html_table();
+    $table->id = 'table-files-ptuv';
+    $table->head = array(
+        get_string('filename', 'local_plantalentosuv'),
+        get_string('filesize', 'local_plantalentosuv'),
+        get_string('filetype', 'local_plantalentosuv')
+    );
+    $table->colclasses = array(
+        'displayname', 'versiondb', 'versiondisk', 'requires', 'status',
+    );
+    $table->data = array();
+
     $htmlfiles = "<div class='row' id='row-table-files'>";
-    $htmlfiles .= "<div class='col-4 offset-4'>";
-    $htmlfiles .= "<table class='table'>";
+    $htmlfiles .= "<div class='col-6'>";
+    $htmlfiles .= "<table class='table table-striped'>";
     $htmlfiles .= "<thead>";
     $htmlfiles .= "<tr>";
     $htmlfiles .= "<th scope='col'> Nombre del archivo";
