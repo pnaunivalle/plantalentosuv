@@ -11,9 +11,21 @@
     margin-top: 30px;
 }
 
+.report-titles {
+    margin-bottom: 15px;
+}
+
+.col-info {
+    margin-bottom: 5px;
+}
+
 .generate-reports {
     cursor: pointer;
     color: #cd1f32;
+}
+
+.div-table-files {
+    margin-top: 15px;
 }
 
 .generate-reports:hover {

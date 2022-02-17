@@ -66,6 +66,10 @@ $string['filename'] = 'Nombre del archivo';
 $string['filetype'] = 'Tipo';
 $string['filesize'] = 'Tamaño';
 $string['total_size_files_in_area'] = 'El total del tamaño de los archivos en el área del plugin es de ';
+$string['no_main_settings'] = 'Las configuraciones principales del plugin no están definidas o están incompletas.';
+$string['no_googledrive_settings'] = 'Las configuraciones de Google Drive del plugin no están definidas o están incompletas.';
+$string['no_ftp_settings'] = 'Las configuraciones FTP del plugin no están definidas o están incompletas.';
+$string['warnings'] = 'Advertencias';
 
 // Settings.
 $string['generalsettingsheading'] = 'Configuraciones generales';

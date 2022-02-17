@@ -44,7 +44,10 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
-## Versión 2022021601 (v1.3.0-beta)
+## Versión 2022021701 (v1.3.0-beta)
+- Se añade función de verificación de configuraciones del plugin
+- Se añaden tablas al estilo de Moodle
+- Se añade el total del peso de los archivos en la sección de información
 - Se listan en el index los archivos en el área de archivos del Plugin con su nombre, tamaño y tipo
 - Recarga la página al generar un nuevo reporte no programado
 

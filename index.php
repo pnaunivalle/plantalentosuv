@@ -125,6 +125,9 @@ foreach ($files as $file) {
     $totalsize += $file->get_filesize() / 1000;
 }
 
+// Validate plugin settings.
+$statussettings = local_platalentosuv_validate_settings();
+
 $data = new \stdClass();
 $data->counterfilesinarea = count($files).get_string('counter_files', 'local_plantalentosuv');
 $data->totalsizefilesinarea = get_string('total_size_files_in_area', 'local_plantalentosuv').$totalsize."kB";
@@ -136,6 +139,7 @@ $data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv'
 $data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
 $data->iconwarning = $OUTPUT->image_url('i/warning', 'local_plantalentosuv');
 $data->htmllistsfiles = $htmllistsfiles;
+$data->statussettings = $statussettings;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
