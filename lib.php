@@ -126,38 +126,20 @@ function local_plantalentosuv_list_files_html($files) {
     );
     $table->data = array();
 
-    $htmlfiles = "<div class='row' id='row-table-files'>";
-    $htmlfiles .= "<div class='col-6'>";
-    $htmlfiles .= "<table class='table table-striped'>";
-    $htmlfiles .= "<thead>";
-    $htmlfiles .= "<tr>";
-    $htmlfiles .= "<th scope='col'> Nombre del archivo";
-    $htmlfiles .= "<th scope='col'> Tamaño";
-    $htmlfiles .= "</th>";
-    $htmlfiles .= "<th scope='col'>Tipo";
-    $htmlfiles .= "</th>";
-    $htmlfiles .= "</tr>";
-    $htmlfiles .= "</thead>";
-    $htmlfiles .= "<tbody>";
-
     foreach ($files as $file) {
 
-        $filename = $file->get_filename();
-        $filesize = $file->get_filesize() / 1000;
-        $filemimetype = $file->get_mimetype();
+        $filename = new html_table_cell($file->get_filename());
+        $filesize = new html_table_cell(strval($file->get_filesize() / 1000)." kB");
+        $filemimetype = new html_table_cell($file->get_mimetype());
 
-        $htmlfiles .= "<tr>";
-        $htmlfiles .= "<td>".$filename."</td>";
-        $htmlfiles .= "<td>".$filesize." kB</td>";
-        $htmlfiles .= "<td>".$filemimetype."</td>";
-        $htmlfiles .= "</tr>";
+        $row = new html_table_row(array($filename, $filesize, $filemimetype));
+
+        $table->data[] = $row;
     }
 
-    $htmlfiles .= "</tbody>";
-    $htmlfiles .= "</table>";
-    $htmlfiles .= "</div>";
-    $htmlfiles .= "</div>";
+    $htmlwriter = new html_writer();
+    $htmltable = $htmlwriter->table($table);
 
-    return $htmlfiles;
+    return $htmltable;
 }
 

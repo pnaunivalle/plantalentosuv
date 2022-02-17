@@ -65,6 +65,7 @@ $string['download_report'] = 'Descargar reporte';
 $string['filename'] = 'Nombre del archivo';
 $string['filetype'] = 'Tipo';
 $string['filesize'] = 'Tamaño';
+$string['total_size_files_in_area'] = 'El total del tamaño de los archivos en el área del plugin es de ';
 
 // Settings.
 $string['generalsettingsheading'] = 'Configuraciones generales';

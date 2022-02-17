@@ -119,8 +119,15 @@ if ($filesessionsbycourse) {
 $files = $filestorage->get_area_files($systemcontext->id, 'local_plantalentosuv', 'plantalentosuvarea', false, 'filename', false);
 $htmllistsfiles = local_plantalentosuv_list_files_html($files);
 
+$totalsize = 0;
+
+foreach ($files as $file) {
+    $totalsize += $file->get_filesize() / 1000;
+}
+
 $data = new \stdClass();
-$data->filesinfilearea = count($files).get_string('counter_files', 'local_plantalentosuv');
+$data->counterfilesinarea = count($files).get_string('counter_files', 'local_plantalentosuv');
+$data->totalsizefilesinarea = get_string('total_size_files_in_area', 'local_plantalentosuv').$totalsize."kB";
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
 $data->urltoitemsbycoursereport = $urltoitemsbycoursereport;

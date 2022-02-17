@@ -65,6 +65,7 @@ $string['download_report'] = 'Download report';
 $string['filename'] = 'File name';
 $string['filetype'] = 'Type';
 $string['filesize'] = 'Size';
+$string['total_size_files_in_area'] = 'The total size of the files in the area is ';
 
 // Settings.
 $string['generalsettingsheading'] = 'General settings';

@@ -144,9 +144,23 @@
         </div>
 
         <div class="col-12">
-            {{filesinfilearea}}
+            {{#pix}} i/info,
+                local_plantalentosuv,
+                {{#str}}counter_files,
+                local_plantalentosuv{{/str}}
+            {{/pix}}
+            {{counterfilesinarea}}
         </div>
-
-        {{{htmllistsfiles}}}
+        <div class="col-12">
+            {{#pix}} i/info,
+                local_plantalentosuv,
+                {{#str}}counter_files,
+                local_plantalentosuv{{/str}}
+            {{/pix}}
+            {{totalsizefilesinarea}}
+        </div>
+        <div class="col-8 offset-2">
+            {{{htmllistsfiles}}}
+        </div>
     </div>
 </div>
