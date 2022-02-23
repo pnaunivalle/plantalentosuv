@@ -57,8 +57,14 @@ class manage_grade_report {
         $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
 
         // Validate params.
-        $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
-        $categoryid = $category->id;
+        $parentcategory = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+        $parentcategoryid = $parentcategory->id;
+
+        $sqlquery = "SELECT cc.id
+                    FROM {course_categories} cc
+                    WHERE cc.parent = ?";
+
+        $categories = $DB->get_records_sql($sqlquery, array($parentcategoryid));
 
         foreach ($usersids as $userid) {
 
@@ -84,7 +90,7 @@ class manage_grade_report {
 
                 $coursereport = array();
 
-                if ($course->category != $categoryid) {
+                if (!array_key_exists($course->category, $categories)) {
                     unset($usercourses[$course->id]);
                 } else {
 
