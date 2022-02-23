@@ -143,5 +143,4 @@ $data->statussettings = $statussettings;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
-
 echo $OUTPUT->footer();

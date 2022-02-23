@@ -3,83 +3,91 @@ define(
       'jquery',
       'core/ajax',
       'core/modal_factory',
-      'core/modal_events'
+      'core/custom_interaction_events',
+      'core/modal_events',
+      'local_plantalentosuv/modal_confirm_report'
     ],
-    function($, ajax, ModalFactory, ModalEvents) {
-        /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
+    function($, ajax, ModalFactory, CustomEvents, ModalEvents, ModalConfirmReport) {
 
-        /**
-         * Callback for modals
-         * @param {Event} e
-         */
-        function modalcallback(e) {
-          e.preventDefault();
-          location.reload(true);
-        }
+      /**
+       * Creates the modal for the course copy form
+       *
+       * @param {modalObject} modal
+       */
+      function reloadPage(modal) {
+        modal.show();
+        modal.getRoot().on(ModalEvents.hidden, location.reload(true));
+      }
 
-        return {
-            init: function() {
-              $(document).ready(function() {
+      return {
+        init: function() {
+          $(document).ready(function() {
 
-                $('#generate-report-grade-items').on('click', function() {
+            var triggerAttendanceReport = $('#generate-report-attendace-sessions');
+            var triggerGradeReport = $('#generate-report-grade-items');
 
-                    var promiseGetItemsByCourse = ajax.call([{
-                        methodname: 'local_plantalentosuv_get_grade_items_by_course',
-                        args: {
-                        }
-                    }]);
+            // Modal to confirm the generation of the attendance session report.
+            ModalFactory.create({
+                type: ModalConfirmReport.TYPE,
+                large: false,
+                scrollable: false
+            }, triggerAttendanceReport)
+            .done(function(modal) {
+              var SELECTORS = {
+                ACCEPT_BUTTON: '[data-action="acept-generation"]',
+                CANCEL_BUTTON: '[data-action="cancel-generation"]',
+              };
 
-                    promiseGetItemsByCourse[0].done(function(response) {
+              modal.getModal().on(CustomEvents.events.activate, SELECTORS.ACCEPT_BUTTON, function() {
+                modal.hide();
 
-                      var modalbody = "";
-
-                      if (response.result) {
-                        modalbody = "Reporte generado éxitosamente.";
-                      } else {
-                        modalbody = "El reporte no fue generado.";
-                      }
-
-                      ModalFactory.create({
-                        title: 'Éxito',
-                        body: modalbody
-                      })
-                      .done(function(modal) {
-                        modal.show();
-                        modal.getRoot().on(ModalEvents.hidden, modalcallback);
-                      });
-                    });
-                });
-
-                $('#generate-report-attendace-sessions').on('click', function() {
-
-                  var promiseGetSessionsByCourse = ajax.call([{
+                var promiseGetItemsByCourse = ajax.call([{
                     methodname: 'local_plantalentosuv_get_course_attendance_sessions',
                     args: {
                     }
-                  }]);
+                }]);
 
-                  promiseGetSessionsByCourse[0].done(function(response) {
-
-                    var modalbody = "";
-
-                    if (response.result) {
-                      modalbody = "Reporte generado éxitosamente.";
-                    } else {
-                      modalbody = "El reporte no fue generado.";
-                    }
-
-                    ModalFactory.create({
-                      title: 'Éxito',
-                      body: modalbody
-                    })
-                    .done(function(modal) {
-                      modal.show();
-                      modal.getRoot().on(ModalEvents.hidden, modalcallback);
-                    });
-                  });
-
+                promiseGetItemsByCourse[0].done(function() {
+                  ModalFactory.create({
+                    title: 'Éxito',
+                    body: 'El reporte fue creado correctamente'
+                  })
+                  .done(reloadPage);
                 });
               });
-            }
-        };
-      });
+            });
+
+            // Modal to confirm the generation of the items grade report.
+            ModalFactory.create({
+              type: ModalConfirmReport.TYPE,
+              large: false,
+              scrollable: false
+            }, triggerGradeReport)
+            .done(function(modal) {
+              var SELECTORS = {
+                ACCEPT_BUTTON: '[data-action="acept-generation"]',
+                CANCEL_BUTTON: '[data-action="cancel-generation"]',
+              };
+
+              modal.getModal().on(CustomEvents.events.activate, SELECTORS.ACCEPT_BUTTON, function() {
+                modal.hide();
+
+                var promiseGetItemsByCourse = ajax.call([{
+                    methodname: 'local_plantalentosuv_get_grade_items_by_course',
+                    args: {
+                    }
+                }]);
+
+                promiseGetItemsByCourse[0].done(function() {
+                  ModalFactory.create({
+                    title: 'Éxito',
+                    body: 'El reporte fue creado correctamente'
+                  })
+                  .done(reloadPage);
+                });
+              });
+            });
+          });
+        }
+      };
+    });

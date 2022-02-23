@@ -71,6 +71,10 @@ $string['no_googledrive_settings'] = 'The Google Drive plugin settings have not 
 $string['no_ftp_settings'] = 'The FTP plugin settings have not been defined or are incomplete.';
 $string['warnings'] = 'Warnings';
 
+// Modals.
+$string['title_confirm_report'] = 'Confirm report generation';
+$string['text_confirm_report'] = 'Do you want to generate the report?';
+
 // Settings.
 $string['generalsettingsheading'] = 'General settings';
 $string['generalsettingsheading_desc'] = 'General settings for the plugin';
