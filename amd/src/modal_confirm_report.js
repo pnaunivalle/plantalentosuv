@@ -1,11 +1,9 @@
 define(['jquery',
-        'core/ajax',
-        'core/modal_factory',
         'core/custom_interaction_events',
         'core/modal',
         'core/modal_events',
         'core/modal_registry'],
-        function($, ajax, ModalFactory, CustomEvents, Modal, ModalEvents, ModalRegistry) {
+        function($, CustomEvents, Modal, ModalEvents, ModalRegistry) {
 
     var registered = false;
     var SELECTORS = {
