@@ -34,19 +34,13 @@ $systemcontext = context_system::instance();
 // Validate access.
 $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
 
-if ($categoryidnmber) {
-    $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
-    $categoryid = $category->id;
-    $categorycontext = context_coursecat::instance($categoryid);
+$category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+$categoryid = $category->id;
+$categorycontext = context_coursecat::instance($categoryid);
 
-    if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
-        require_capability('local/plantalentosuv:viewreport', $categorycontext);
-    }
-} else {
-    throw new moodle_exception('no_category_settings', 'local_plantalentosuv');
+if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
+    require_capability('local/plantalentosuv:viewreport', $categorycontext);
 }
-
-
 
 // Setings page.
 $PAGE->set_context($systemcontext);
