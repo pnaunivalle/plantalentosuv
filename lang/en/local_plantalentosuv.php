@@ -40,7 +40,7 @@ $string['categorycoursestotrack_desc'] = 'Id of the category to track.';
 $string['cohorttotrack'] = 'ID number of cohort';
 $string['cohorttotrack_desc'] = 'ID number of cohort to track.';
 $string['categorytotrack'] = 'ID number of course category';
-$string['categorytotrack_desc'] = 'ID number of course category to track.';
+$string['categorytotrack_desc'] = 'ID number of course category to track. Review the course settings.';
 
 // Capabilities.
 $string['plantalentosuv:viewreport'] = 'View report';
@@ -70,6 +70,7 @@ $string['no_main_settings'] = 'The main plugin settings have not been defined or
 $string['no_googledrive_settings'] = 'The Google Drive plugin settings have not been defined or are incomplete.';
 $string['no_ftp_settings'] = 'The FTP plugin settings have not been defined or are incomplete.';
 $string['warnings'] = 'Warnings';
+$string['no_category_settings'] = 'Course category not set';
 
 // Modals.
 $string['title_confirm_report'] = 'Confirm report generation';

@@ -25,19 +25,28 @@
 require_once('../../config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
+use moodle_exception;
+
 require_login();
 
 $systemcontext = context_system::instance();
 
 // Validate access.
 $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
-$category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
-$categoryid = $category->id;
-$categorycontext = context_coursecat::instance($categoryid);
 
-if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
-    require_capability('local/plantalentosuv:viewreport', $categorycontext);
+if ($categoryidnmber) {
+    $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+    $categoryid = $category->id;
+    $categorycontext = context_coursecat::instance($categoryid);
+
+    if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
+        require_capability('local/plantalentosuv:viewreport', $categorycontext);
+    }
+} else {
+    throw new moodle_exception('no_category_settings', 'local_plantalentosuv');
 }
+
+
 
 // Setings page.
 $PAGE->set_context($systemcontext);

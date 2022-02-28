@@ -70,6 +70,7 @@ $string['no_main_settings'] = 'Las configuraciones principales del plugin no est
 $string['no_googledrive_settings'] = 'Las configuraciones de Google Drive del plugin no están definidas o están incompletas.';
 $string['no_ftp_settings'] = 'Las configuraciones FTP del plugin no están definidas o están incompletas.';
 $string['warnings'] = 'Advertencias';
+$string['no_category_settings'] = 'Categoría de cursos no configurada. Revise las configuraciones del plugin.';
 
 // Modals.
 $string['title_confirm_report'] = 'Confirme la generación del reporte';
