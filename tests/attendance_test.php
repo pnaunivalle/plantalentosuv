@@ -20,7 +20,7 @@
  * @package    local_plantalentosuv
  * @category   phpunit
  * @author     Iader E. García Gómez <iadergg@gmail.com>
- * @copyright  2021 Plan Talentos Universidad del Valle
+ * @copyright  2022 Plan Talentos Universidad del Valle
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -84,7 +84,9 @@ class attendance_testcase extends advanced_testcase {
         $this->attendance->add_sessions($this->sessions);
 
         $managerattendance = new manage_attendance();
-        $managerattendance->get_course_sessions($parentcategory->id);
+        $reportsessions = $managerattendance->get_course_sessions($parentcategory->id);
+
+        $this->assertIsArray($reportsessions);
 
     }
 
