@@ -231,6 +231,7 @@ class manage_attendance {
                     $sessionsraw = $attendancestructure->get_filtered_sessions();
 
                     $sessionsreport = array();
+                    $sessionsreport['attendanceid'] = $attendanceactivity->attid;
                     $sessionsreport['courseid'] = $courserecord->id;
                     $sessionsreport['fullname'] = $courserecord->fullname;
                     $sessionsreport['shortname'] = $courserecord->shortname;
@@ -249,6 +250,8 @@ class manage_attendance {
                         $session['duration'] = $sessioninfo->duration;
                         $session['description'] = $sessioninfo->description;
                         $session['sessiondate'] = $sessioninfo->sessdate;
+                        $session['lasttaken'] = $sessionraw->lasttaken;
+                        $session['lasttakenby'] = $sessioninfo->lasttakenby;
 
                         array_push($sessionsreport['sessions'], $session);
                     }
