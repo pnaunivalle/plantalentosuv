@@ -36,7 +36,7 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
 
     $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
 
-    if ($categoryidnumber) {
+    if ($categoryidnumber != 0) {
         // Validate params.
         $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
 

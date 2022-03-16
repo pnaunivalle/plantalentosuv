@@ -125,7 +125,7 @@ $htmllistsfiles = local_plantalentosuv_list_files_html($files);
 $totalsize = 0;
 
 foreach ($files as $file) {
-    $totalsize += $file->get_filesize() / 1000;
+    $totalsize += $file->get_filesize() / 1000000;
 }
 
 // Validate plugin settings.
@@ -133,7 +133,7 @@ $statussettings = local_platalentosuv_validate_settings();
 
 $data = new \stdClass();
 $data->counterfilesinarea = count($files).get_string('counter_files', 'local_plantalentosuv');
-$data->totalsizefilesinarea = get_string('total_size_files_in_area', 'local_plantalentosuv').$totalsize."kB";
+$data->totalsizefilesinarea = get_string('total_size_files_in_area', 'local_plantalentosuv').$totalsize." MB";
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
 $data->urltoitemsbycoursereport = $urltoitemsbycoursereport;
