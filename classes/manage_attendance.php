@@ -230,9 +230,13 @@ class manage_attendance {
 
                     $sessionsraw = $attendancestructure->get_filtered_sessions();
 
+                    $instance = $DB->get_record('course_modules',
+                                                ['course' => $courserecord->id, 'instance' => $attendanceactivity->attid]);
+
                     $sessionsreport = array();
                     $sessionsreport['attendanceid'] = $attendanceactivity->attid;
                     $sessionsreport['courseid'] = $courserecord->id;
+                    $sessionsreport['instanceid'] = $instance->id;
                     $sessionsreport['fullname'] = $courserecord->fullname;
                     $sessionsreport['shortname'] = $courserecord->shortname;
                     $sessionsreport['idnumber'] = $courserecord->idnumber;
