@@ -44,6 +44,19 @@ Los reportes retornados por el plugin son los siguientes:
 
 ##  Versiones
 
+## Versión 2022021701 (v1.4.1)
+- Se añade el identificador de la instancia de cada actividad de asistencias en el reporte de sesiones de asistencia.
+- Se añade el envio de los reportes de ejecución no programada a Google Drive.
+- Se añade el id de la sesión de la actividad de asistencias a la que pertenece una sesión determinada.
+
+## Versión 2022021701 (v1.3.0-beta)
+- Se añade función de verificación de configuraciones del plugin
+- Se añade modal de confirmación para la generación de reportes no programados
+- Se añaden tablas al estilo de Moodle
+- Se añade el total del peso de los archivos en la sección de información
+- Se listan en el index los archivos en el área de archivos del Plugin con su nombre, tamaño y tipo
+- Recarga la página al generar un nuevo reporte no programado
+
 ## Versión 2022021701 (v1.3.0-beta)
 - Se añade función de verificación de configuraciones del plugin
 - Se añade modal de confirmación para la generación de reportes no programados
