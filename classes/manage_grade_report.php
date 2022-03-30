@@ -119,36 +119,22 @@ class manage_grade_report {
 
                         if (isset($item['weight'])) {
 
-                            $itemnameraw = $item['itemname']['content'];
+                            $itemraw = explode('_', $item['itemname']['id']);
 
-                            $dom = new \DOMDocument();
-                            $dom->loadHTML($itemnameraw);
-                            $domx = new \DOMXPath($dom);
+                            $itemid = $itemraw[1];
+                            $itemtype = $itemraw[0];
 
-                            $entries = $domx->evaluate("//a");
-
-                            if ($entries->length > 0) {
-                                foreach ($entries as $entry) {
-                                    $itemid = "";
-                                    $itemname = "";
-                                    $itemurl = $entry->getAttribute('href');
-                                    $itemid = explode('&', explode('id=', $itemurl)[1])[0];
-                                    $itemname = $entry->nodeValue;
-
-                                }
+                            if ($itemtype == 'cat') {
+                                $table = 'grade_categories';
+                                $aggregation = $DB->get_record($table, array("id" => $itemid))->aggregation;
                             } else {
-                                $entries = $domx->evaluate("//span");
-
-                                foreach ($entries as $entry) {
-                                    $itemid = $course->id;
-                                    $itemname = $entry->nodeValue;
-
-                                }
+                                $table = 'grade_items';
+                                $aggregation = $DB->get_record($table, array("id" => $itemid))->aggregationcoef;
                             }
 
                             $itemdata['itemid'] = $itemid;
-                            $itemdata['itemname'] = $itemname;
                             $itemdata['grade'] = $item['grade']['content'];
+                            $itemdata['aggregation'] = $aggregation;
 
                             if ($item['feedback']['content'] == "&nbsp;") {
                                 $itemdata['feedback'] = null;
@@ -188,6 +174,8 @@ class manage_grade_report {
         define("TYPE_CATEGORYITEM", "categoryitem");
         define("TYPE_FILLERLAST", "fillerlast");
         define("TYPE_COURSEITEM", "courseitem");
+        define("TYPE_FILLER", "filler");
+        define("TYPE_FILLERFIRST", "fillerfirst");
 
         $coursesitemsreport = array();
 
@@ -285,6 +273,15 @@ class manage_grade_report {
                     $objectreport['gradepass'] = $gradeobject['object']->gradepass;
                     $objectreport['itemname'] = "Total course";
 
+                } else if ($gradeobject['type'] == TYPE_FILLER || $gradeobject['type'] == TYPE_FILLERFIRST) {
+
+                    $objectreport['itemid'] = $gradeobject['children'][0]['object']->id;
+                    $objectreport['itemtype'] = $gradeobject['children'][0]['object']->itemtype;
+                    $objectreport['iteminstance'] = $gradeobject['children'][0]['object']->iteminstance;
+                    $objectreport['grademax'] = $gradeobject['children'][0]['object']->grademax;
+                    $objectreport['grademin'] = $gradeobject['children'][0]['object']->grademin;
+                    $objectreport['gradepass'] = $gradeobject['children'][0]['object']->gradepass;
+                    $objectreport['itemname'] = $gradeobject['children'][0]['object']->itemname;
                 }
 
                 array_push($courseitemsreport['items'], $objectreport);
