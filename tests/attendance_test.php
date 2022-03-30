@@ -43,7 +43,7 @@ class attendance_testcase extends advanced_testcase {
     protected $teacher;
     protected $students;
     protected $course;
-    protected $attenance;
+    protected $attendance;
 
     public function test_generate_session_report() {
 
