@@ -100,7 +100,7 @@ class local_plantalentosuv_external extends external_api {
 
         $managerupload = new upload_files();
 
-        $filenametoupload = substr($filename, 0, -3) . '_' . date("d") . "_" . date("m") . "_" . date("Y") . '.json';
+        $filenametoupload = substr($filename, 0, -5) . '_' . date("d") . "_" . date("m") . "_" . date("Y") . '.json';
 
         if ($reportfile) {
             $result = 1;
