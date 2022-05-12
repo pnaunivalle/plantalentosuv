@@ -90,6 +90,28 @@ class attendance_testcase extends advanced_testcase {
 
     }
 
+    public function test_get_attendance_report() {
+
+        global $DB;
+
+        $cohortidnumber = get_config('local_plantalentosuv', 'cohorttotrack');
+        // Validate params.
+        $cohort = $DB->get_record('cohort', array('idnumber' => $cohortidnumber), '*', MUST_EXIST);
+        $cohortid = $cohort->id;
+
+        $cohortmembers = $DB->get_records_sql("SELECT DISTINCT u.id, u.username, u.email, u.lastname, u.firstname
+                                                FROM {user} u, {cohort_members} cm
+                                                WHERE u.id = cm.userid AND cm.cohortid = ?
+                                                ORDER BY lastname ASC, firstname ASC", array($cohort->id));
+
+        $members[] = array('cohortid' => $cohortid, 'userids' => array_keys($cohortmembers));
+
+        // Get attendance report.
+
+        $managerattendance = new \local_plantalentosuv\manage_attendance();
+        $userattendance = $managerattendance->get_attendance_users($members[0]['userids']);
+    }
+
     /** Creating 10 students and 1 teacher. */
     protected function create_and_enrol_users() {
         $this->students = array();
