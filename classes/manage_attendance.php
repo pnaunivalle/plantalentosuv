@@ -51,13 +51,14 @@ class manage_attendance {
         global $DB;
 
         $userattendances = array();
+        $usersinarray = array();
 
         foreach ($usersids as $userid) {
 
             $usercourses = enrol_get_users_courses($userid);
 
             // Get user data.
-            $sqlquery = "SELECT u.id, u.username, u.lastname, u.firstname, u.email
+            $sqlquery = "SELECT DISTINCT u.id, u.username, u.lastname, u.firstname, u.email
                         FROM {user} u
                         WHERE id = ".$userid;
 
@@ -155,7 +156,10 @@ class manage_attendance {
                 }
             }
 
-            array_push($userattendances, $userattendance);
+            if (!in_array($userattendance['userid'], $usersinarray)) {
+                array_push($userattendances, $userattendance);
+                array_push($usersinarray, $userattendance['userid']);
+            }
         }
 
         return $userattendances;
