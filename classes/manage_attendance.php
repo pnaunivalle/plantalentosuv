@@ -55,7 +55,7 @@ class manage_attendance {
 
         foreach ($usersids as $userid) {
 
-            $moodleuser = $DB->get_record_sql('user', array('id' => $userid));
+            $moodleuser = $DB->get_record('user', array('id' => $userid));
 
             $userattendance = array();
             $userattendance['userid'] = $userid;
@@ -65,12 +65,63 @@ class manage_attendance {
             $userattendance['email'] = $moodleuser->email;
             $userattendance['courses'] = array();
 
-            $sqlcoursesattendance = "SELECT attlog.sessionid, attses.id, attses.attendanceid
+            $sqlcoursesattendance = "SELECT DISTINCT c.id AS courseid,
+                                                     c.shortname AS courseshortname,
+                                                     c.fullname AS coursefullname
                                      FROM {attendance_log} attlog
-                                          INNER JOIN {attendance_sessions} attses
+                                          INNER JOIN {attendance_sessions} attses ON attlog.sessionid = attses.id
+                                          INNER JOIN {attendance} att ON att.id = attses.attendanceid
+                                          INNER JOIN {course} c ON c.id = att.course
                                      WHERE studentid = ?";
 
+            $coursesattendance = $DB->get_records_sql($sqlcoursesattendance, array($userid));
+
+            foreach ($coursesattendance as $courseattendance) {
+
+                $course = array();
+                $course['courseid'] = $courseattendance->courseid;
+                $course['courseshortname'] = $courseattendance->courseshortname;
+                $course['coursefullname'] = $courseattendance->coursefullname;
+                $course['attendance'] = array();
+
+                $sqllogsstudent = "SELECT DISTINCT attlog.id AS logid,
+                                          att.id AS attendanceid,
+                                          att.name AS attendancename,
+                                          attses.id AS sessionid,
+                                          attses.description AS sessiondescription,
+                                          attses.sessdate AS sessiondate,
+                                          attlog.statusid AS statusid
+                                   FROM {attendance_log} attlog
+                                        INNER JOIN {attendance_sessions} attses ON attlog.sessionid = attses.id
+                                        INNER JOIN {attendance} att ON att.id = attses.attendanceid
+                                   WHERE att.course = ? AND attlog.studentid =  ?";
+
+                $logsstudent = $DB->get_records_sql($sqllogsstudent, array($courseattendance->courseid, $userid));
+
+                $course['attendance']['fullsessionslog'] = array();
+
+                foreach ($logsstudent as $logstudent) {
+                    $log = array();
+                    $log['sessionid'] = $logstudent->sessionid;
+                    $log['timestamp'] = $logstudent->sessiondate;
+                    $log['description'] = $logstudent->sessiondescription;
+                    $log['statusid'] = $logstudent->statusid;
+
+                    array_push($course['attendance']['fullsessionslog'], $log);
+                }
+
+                $course['attendance']['attendanceid'] = $logstudent->attendanceid;
+                $course['attendance']['attendancename'] = $logstudent->attendancename;
+
+                print_r($course);
+
+                array_push($userattendance['courses'], $course);
+            }
+
+            array_push($userattendances, $userattendance);
         }
+
+
 
         return $userattendances;
     }
