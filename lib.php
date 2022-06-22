@@ -36,7 +36,7 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
 
     $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
 
-    if ($categoryidnumber) {
+    if ($categoryidnumber != 0) {
         // Validate params.
         $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
 
@@ -107,7 +107,7 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
 }
 
 /**
- * local_plantalentosuv_list_files_html
+ * Returns table html with files in plugin filearea
  *
  * @param stored_file[] $files
  * @return string $htmlfiles
@@ -121,15 +121,13 @@ function local_plantalentosuv_list_files_html($files) {
         get_string('filesize', 'local_plantalentosuv'),
         get_string('filetype', 'local_plantalentosuv')
     );
-    $table->colclasses = array(
-        'displayname', 'versiondb', 'versiondisk', 'requires', 'status',
-    );
+
     $table->data = array();
 
     foreach ($files as $file) {
 
         $filename = new html_table_cell($file->get_filename());
-        $filesize = new html_table_cell(strval($file->get_filesize() / 1000)." kB");
+        $filesize = new html_table_cell(strval(round($file->get_filesize() / 1000, 2))." kB");
         $filemimetype = new html_table_cell($file->get_mimetype());
 
         $row = new html_table_row(array($filename, $filesize, $filemimetype));
@@ -141,5 +139,42 @@ function local_plantalentosuv_list_files_html($files) {
     $htmltable = $htmlwriter->table($table);
 
     return $htmltable;
+}
+
+/**
+ * Returns the plugin setting status
+ *
+ * @return array $settingstatus
+ */
+function local_platalentosuv_validate_settings() {
+
+    $settingstatus = array();
+
+    $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+    $cohortidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+
+    $uploadtogoogledrive = get_config('local_plantalentosuv', 'uploadtogoogledrive');
+    $jsonkey = get_config('local_plantalentosuv', 'jsonkey');
+    $jsonpath = get_config('local_plantalentosuv', 'jsonpath');
+
+    $uploadtoexternalserver = get_config('local_plantalentosuv', 'uploadtoexternalserver');
+    $ftpusername = get_config('local_plantalentosuv', 'ftpusername');
+    $ftpport = get_config('local_plantalentosuv', 'ftpport');
+    $ftpserver = get_config('local_plantalentosuv', 'ftpserver');
+    $ftppassword = get_config('local_plantalentosuv', 'ftppassword');
+
+    if (!$categoryidnumber || !$cohortidnumber) {
+        $settingstatus['main'] = get_string('no_main_settings', 'local_plantalentosuv');
+    }
+
+    if (!$uploadtogoogledrive || !$jsonkey || !$jsonpath) {
+        $settingstatus['googledrive'] = get_string('no_googledrive_settings', 'local_plantalentosuv');
+    }
+
+    if (!$uploadtoexternalserver || !$ftpusername || !$ftpport || !$ftpserver || !$ftppassword ) {
+        $settingstatus['ftp'] = get_string('no_ftp_settings', 'local_plantalentosuv');
+    }
+
+    return $settingstatus;
 }
 

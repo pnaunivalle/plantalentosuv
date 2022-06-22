@@ -51,6 +51,7 @@ class manage_attendance {
         global $DB;
 
         $userattendances = array();
+        $usersinarray = array();
 
         foreach ($usersids as $userid) {
 
@@ -64,7 +65,10 @@ class manage_attendance {
             $userattendance['email'] = $moodleuser->email;
             $userattendance['courses'] = array();
 
-
+            $sqlcoursesattendance = "SELECT attlog.sessionid, attses.id, attses.attendanceid
+                                     FROM {attendance_log} attlog
+                                          INNER JOIN {attendance_sessions} attses
+                                     WHERE studentid = ?";
 
         }
 
@@ -140,8 +144,13 @@ class manage_attendance {
 
                     $sessionsraw = $attendancestructure->get_filtered_sessions();
 
+                    $instance = $DB->get_record('course_modules',
+                                                ['course' => $courserecord->id, 'instance' => $attendanceactivity->attid]);
+
                     $sessionsreport = array();
+                    $sessionsreport['attendanceid'] = $attendanceactivity->attid;
                     $sessionsreport['courseid'] = $courserecord->id;
+                    $sessionsreport['instanceid'] = $instance->id;
                     $sessionsreport['fullname'] = $courserecord->fullname;
                     $sessionsreport['shortname'] = $courserecord->shortname;
                     $sessionsreport['idnumber'] = $courserecord->idnumber;
@@ -159,6 +168,8 @@ class manage_attendance {
                         $session['duration'] = $sessioninfo->duration;
                         $session['description'] = $sessioninfo->description;
                         $session['sessiondate'] = $sessioninfo->sessdate;
+                        $session['lasttaken'] = $sessionraw->lasttaken;
+                        $session['lasttakenby'] = $sessioninfo->lasttakenby;
 
                         array_push($sessionsreport['sessions'], $session);
                     }

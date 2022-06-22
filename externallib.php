@@ -23,6 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_plantalentosuv\upload_files;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/externallib.php");
@@ -96,9 +98,19 @@ class local_plantalentosuv_external extends external_api {
         // Create and storage file.
         $reportfile = $filestorage->create_file_from_string($fileinfo, $itemsbycourse);
 
+        $managerupload = new upload_files();
+
+        $filenametoupload = substr($filename, 0, -5) . '_' . date("d") . "_" . date("m") . "_" . date("Y") . '.json';
+
         if ($reportfile) {
             $result = 1;
+
+            // Upload file attendace report to external server.
+            $managerupload->upload_file_external_server($reportfile->get_content_file_handle(), $filenametoupload);
         }
+
+        $filedescription = "Grate items report created on ".date("d")."_".date("m")."_".date("Y");
+        $managerupload->upload_file_google_drive($filenametoupload, 'application/json', $reportfile, $filedescription);
 
         $arrayresult = array(
             'result' => $result,
@@ -180,9 +192,20 @@ class local_plantalentosuv_external extends external_api {
         // Create and storage file.
         $reportfile = $filestorage->create_file_from_string($fileinfo, $sessionsreport);
 
+        $managerupload = new upload_files();
+
+        $filenametoupload = substr($filename, 0, -3) . '_' . date("d") . "_" . date("m") . "_" . date("Y") . '.json';
+
         if ($reportfile) {
+
             $result = 1;
+
+            // Upload file attendace report to external server.
+            $managerupload->upload_file_external_server($reportfile->get_content_file_handle(), $filenametoupload);
         }
+
+        $filedescription = "Attendance report created on ".date("d")."_".date("m")."_".date("Y");
+        $managerupload->upload_file_google_drive($filenametoupload, 'application/json', $sessionsreport, $filedescription);
 
         $arrayresult = array(
             'result' => $result,

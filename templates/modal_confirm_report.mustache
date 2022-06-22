@@ -1,0 +1,12 @@
+{{< core/modal }}
+    {{$title}}{{#str}} title_confirm_report, local_plantalentosuv {{/str}}{{/title}}
+    {{$body}}
+        <div class="container">
+            <p>{{#str}} text_confirm_report, local_plantalentosuv {{/str}}</p>
+        </div>
+    {{/body}}
+    {{$footer}}
+        <button type="button" class="btn btn-primary" data-action="acept-generation">{{#str}} accept {{/str}}</button>
+        <button type="button" class="btn btn-secondary" data-action="cancel-generation">{{#str}} cancel {{/str}}</button>
+    {{/footer}}
+{{/ core/modal }}

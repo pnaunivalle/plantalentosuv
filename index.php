@@ -25,12 +25,15 @@
 require_once('../../config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
+use moodle_exception;
+
 require_login();
 
 $systemcontext = context_system::instance();
 
 // Validate access.
 $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+
 $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
 $categoryid = $category->id;
 $categorycontext = context_coursecat::instance($categoryid);
@@ -122,12 +125,15 @@ $htmllistsfiles = local_plantalentosuv_list_files_html($files);
 $totalsize = 0;
 
 foreach ($files as $file) {
-    $totalsize += $file->get_filesize() / 1000;
+    $totalsize += $file->get_filesize() / 1000000;
 }
+
+// Validate plugin settings.
+$statussettings = local_platalentosuv_validate_settings();
 
 $data = new \stdClass();
 $data->counterfilesinarea = count($files).get_string('counter_files', 'local_plantalentosuv');
-$data->totalsizefilesinarea = get_string('total_size_files_in_area', 'local_plantalentosuv').$totalsize."kB";
+$data->totalsizefilesinarea = get_string('total_size_files_in_area', 'local_plantalentosuv').$totalsize." MB";
 $data->urltoattendancereport = $urltoattendancereport;
 $data->urltogradesreport = $urltogradesreport;
 $data->urltoitemsbycoursereport = $urltoitemsbycoursereport;
@@ -136,8 +142,8 @@ $data->imageattendance = $OUTPUT->image_url('attendance', 'local_plantalentosuv'
 $data->imagegrades = $OUTPUT->image_url('grades', 'local_plantalentosuv');
 $data->iconwarning = $OUTPUT->image_url('i/warning', 'local_plantalentosuv');
 $data->htmllistsfiles = $htmllistsfiles;
+$data->statussettings = $statussettings;
 
 echo $OUTPUT->header();
 echo $OUTPUT->render_from_template('local_plantalentosuv/index', $data);
-
 echo $OUTPUT->footer();

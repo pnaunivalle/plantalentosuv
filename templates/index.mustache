@@ -29,8 +29,34 @@
 
 <div class="container">
 
-    <div class="row box-reports" id="row-scheduled-reports">
+    {{#statussettings}}
+    <div class="row box-reports">
+        <div class="col-12 report-titles">
+            <h4>{{#str}}warnings, local_plantalentosuv{{/str}}</h4>
+        </div>
+        {{#main}}
         <div class="col-12">
+            <img src="{{iconwarning}}" />
+            {{main}}
+        </div>
+        {{/main}}
+        {{#googledrive}}
+        <div class="col-12">
+            <img src="{{iconwarning}}" />
+            {{googledrive}}
+        </div>
+        {{/googledrive}}
+        {{#ftp}}
+        <div class="col-12">
+            <img src="{{iconwarning}}" />
+            {{ftp}}
+        </div>
+        {{/ftp}}
+    </div>
+    {{/statussettings}}
+
+    <div class="row box-reports" id="row-scheduled-reports">
+        <div class="col-12 report-titles">
             <h4>{{#str}}scheduled_reports, local_plantalentosuv{{/str}}</h4>
         </div>
 
@@ -86,7 +112,7 @@
 
 
     <div class="row box-reports" id="row-unscheduled-reports">
-        <div class="col-12">
+        <div class="col-12 report-titles">
             <h4>{{#str}}unscheduled_reports, local_plantalentosuv{{/str}}</h4>
         </div>
         <div class="col-6 div-reports">
@@ -139,11 +165,11 @@
     </div>
 
     <div class="row box-reports" id="row-info">
-        <div class="col-12">
+        <div class="col-12 report-titles">
             <h4>{{#str}}info, local_plantalentosuv{{/str}}</h4>
         </div>
 
-        <div class="col-12">
+        <div class="col-12 col-info">
             {{#pix}} i/info,
                 local_plantalentosuv,
                 {{#str}}counter_files,
@@ -151,7 +177,7 @@
             {{/pix}}
             {{counterfilesinarea}}
         </div>
-        <div class="col-12">
+        <div class="col-12 col-info">
             {{#pix}} i/info,
                 local_plantalentosuv,
                 {{#str}}counter_files,
@@ -159,7 +185,7 @@
             {{/pix}}
             {{totalsizefilesinarea}}
         </div>
-        <div class="col-8 offset-2">
+        <div class="col-8 offset-2 div-table-files">
             {{{htmllistsfiles}}}
         </div>
     </div>

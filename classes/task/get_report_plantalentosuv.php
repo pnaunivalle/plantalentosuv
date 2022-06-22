@@ -78,8 +78,8 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         // Get attendance report.
 
         $managerattendance = new \local_plantalentosuv\manage_attendance();
-
         $userattendance = $managerattendance->get_attendance_users($members[0]['userids']);
+
         $userattendancejson = json_encode($userattendance, JSON_UNESCAPED_UNICODE);
 
         $attendancefilename = "attendancereport_ptuv_".date("d")."_".date("m")."_".date("Y").".json";
@@ -105,12 +105,17 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
             // Upload file attendance report to Google Drive.
 
             $filedescription = "Attendance report created on ".date("d")."_".date("m")."_".date("Y");
-            $managerupload->upload_file_google_drive($attendancefilename, 'application/json',
-                                                    $userattendancejson, $filedescription);
+
+            if (get_config('local_iracv', 'uploadtogoogledrive')) {
+                $managerupload->upload_file_google_drive($attendancefilename, 'application/json',
+                                                        $userattendancejson, $filedescription);
+            }
         }
 
-        // Upload file attendace report to external server.
-        $managerupload->upload_file_external_server($attendancefile->get_content_file_handle(), $attendancefilename);
+        if (get_config('local_iracv', 'uploadtoexternalserver')) {
+            // Upload file attendace report to external server.
+            $managerupload->upload_file_external_server($attendancefile->get_content_file_handle(), $attendancefilename);
+        }
 
         // Get grade report.
         $managergradereport = new \local_plantalentosuv\manage_grade_report();
@@ -134,18 +139,23 @@ class get_report_plantalentosuv extends \core\task\scheduled_task {
         // Create and storage file.
         $gradesfile = $filestorage->create_file_from_string($fileinfo, $usergradesjson);
 
-        // Upload file attendance report to Google Drive.
+        // Upload file grade report to Google Drive.
         if ($gradesfile->get_id() > 0) {
 
             mtrace("Grades report file created successfully named ".$gradesfilename);
 
             $filedescription = "Grades report created on ".date("d")."_".date("m")."_".date("Y");
-            $resultupload = $managerupload->upload_file_google_drive($gradesfilename, 'application/json',
-                                                                    $usergradesjson, $filedescription);
+
+            if (get_config('local_plantalentosuv', 'uploadtogoogledrive')) {
+                $resultupload = $managerupload->upload_file_google_drive($gradesfilename, 'application/json',
+                                                                        $usergradesjson, $filedescription);
+            }
         }
 
-        // Upload file attendace report to external server.
-        $managerupload->upload_file_external_server($gradesfile->get_content_file_handle(), $gradesfilename);
+        if (get_config('local_plantalentosuv', 'uploadtoexternalserver')) {
+            // Upload file attendace report to external server.
+            $managerupload->upload_file_external_server($gradesfile->get_content_file_handle(), $gradesfilename);
+        }
 
         // Update courses process completed.
         mtrace("\n" . 'Cron completed at: ' . date('r', time()) . "\n");
