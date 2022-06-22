@@ -71,13 +71,15 @@ $filesessionsbycourse = $filestorage->get_file($systemcontext->id, $component, $
                                                 $filepath, $sessionsbycoursefilename);
 
 if ($fileattendanceinfo) {
-    $urltoattendancereport = moodle_url::make_pluginfile_url($systemcontext->id,
-                                                        $component,
-                                                        $filearea,
-                                                        $itemid,
-                                                        $filepath,
-                                                        $attendancefilename,
-                                                        true);
+    $urltoattendancereport = moodle_url::make_pluginfile_url(
+                                            $fileattendanceinfo->get_contextid(),
+                                            $fileattendanceinfo->get_component(),
+                                            $fileattendanceinfo->get_filearea(),
+                                            $fileattendanceinfo->get_itemid(),
+                                            $fileattendanceinfo->get_filepath(),
+                                            $fileattendanceinfo->get_filename(),
+                                            true
+                                        );
 } else {
     $urltoattendancereport = '';
 }
