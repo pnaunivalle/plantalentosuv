@@ -90,15 +90,21 @@ class manage_attendance {
                                           attses.id AS sessionid,
                                           attses.description AS sessiondescription,
                                           attses.sessdate AS sessiondate,
-                                          attlog.statusid AS statusid
+                                          attlog.statusid AS statusid,
+                                          attses.duration AS sessduration
                                    FROM {attendance_log} attlog
                                         INNER JOIN {attendance_sessions} attses ON attlog.sessionid = attses.id
                                         INNER JOIN {attendance} att ON att.id = attses.attendanceid
-                                   WHERE att.course = ? AND attlog.studentid =  ?";
+                                   WHERE att.course = ?
+                                        AND attlog.studentid = ?
+                                        AND attses.lasttaken > 0";
 
                 $logsstudent = $DB->get_records_sql($sqllogsstudent, array($courseattendance->courseid, $userid));
 
                 $course['attendance']['fullsessionslog'] = array();
+                $course['attendance']['takensessionssumary'] = array();
+
+                $studentgrade = 0;
 
                 foreach ($logsstudent as $logstudent) {
                     $log = array();
@@ -106,6 +112,15 @@ class manage_attendance {
                     $log['timestamp'] = $logstudent->sessiondate;
                     $log['description'] = $logstudent->sessiondescription;
                     $log['statusid'] = $logstudent->statusid;
+                    $log['duration'] = $logstudent->sessduration;
+
+                    $statuses = $DB->get_record('attendance_statuses',
+                                                array('id' => $logstudent->statusid));
+
+                    $studentgrade += intval($statuses->grade);
+
+                    $log['statusacronym'] = $statuses->acronym;
+                    $log['statusdescription'] = $statuses->description;
 
                     array_push($course['attendance']['fullsessionslog'], $log);
                 }
@@ -113,15 +128,25 @@ class manage_attendance {
                 $course['attendance']['attendanceid'] = $logstudent->attendanceid;
                 $course['attendance']['attendancename'] = $logstudent->attendancename;
 
-                print_r($course);
+                // Taken sessions summary.
+
+                $course['attendance']['takensessionssumary']['numtakensessions'] = count($logsstudent);
+                $course['attendance']['takensessionssumary']['takensessionspoints'] = $studentgrade;
+
+                $sqlmaxgrade = "SELECT MAX(grade) AS maxgrade
+                                FROM {attendance_statuses}
+                                WHERE attendanceid = ?";
+
+                $maxgrade = $DB->get_record_sql($sqlmaxgrade, array($logstudent->attendanceid))->maxgrade;
+
+                $course['attendance']['takensessionssumary']['takensessionsmaxpoints'] = count($logsstudent) * intval($maxgrade);
+                $course['attendance']['takensessionssumary']['takensessionspercentage'] = $studentgrade / (count($logsstudent) * intval($maxgrade));
 
                 array_push($userattendance['courses'], $course);
             }
 
             array_push($userattendances, $userattendance);
         }
-
-
 
         return $userattendances;
     }
