@@ -250,6 +250,21 @@ class manage_attendance {
                         array_push($sessionsreport['sessions'], $session);
                     }
 
+                    // Get professor.
+                    $utils = new utils();
+                    $professors = $utils->get_users_with_specific_role($courserecord->id, 'professor');
+
+                    $sessionsreport['professors'] = array();
+
+                    foreach ($professors as $professor) {
+                        $professortoreturn = array();
+                        $professortoreturn['username'] = $professor->username;
+                        $professortoreturn['lastname'] = $professor->lastname;
+                        $professortoreturn['firstname'] = $professor->firstname;
+
+                        array_push($sessionsreport['professors'], $professortoreturn);
+                    }
+
                     array_push($coursessessionsreport, $sessionsreport);
                 }
             }
