@@ -287,6 +287,21 @@ class manage_grade_report {
                 array_push($courseitemsreport['items'], $objectreport);
             }
 
+            // Get professor.
+            $utils = new utils();
+            $professors = $utils->get_users_with_specific_role($course->id, 'professor');
+
+            $courseitemsreport['professors'] = array();
+
+            foreach ($professors as $professor) {
+                $professortoreturn = array();
+                $professortoreturn['username'] = $professor->username;
+                $professortoreturn['lastname'] = $professor->lastname;
+                $professortoreturn['firstname'] = $professor->firstname;
+
+                array_push($courseitemsreport['professors'], $professortoreturn);
+            }
+
             array_push($coursesitemsreport, $courseitemsreport);
         }
 
