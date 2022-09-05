@@ -78,8 +78,12 @@ function local_plantalentosuv_extend_navigation(global_navigation $root) {
  * @return bool false if file not found, does not return if found - justsend the file
  */
 function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+
+    global $DB;
+
     require_login(null, false);
-    if ($context->contextlevel != CONTEXT_SYSTEM) {
+
+    if (!($context->contextlevel == CONTEXT_SYSTEM || $context->contextlevel == CONTEXT_COURSECAT)) {
         return false;
     }
 
@@ -87,7 +91,12 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
         return false;
     }
 
-    if (!has_capability('local/plantalentosuv:viewreport', $context)) {
+    $categoryidnumber = get_config('local_plantalentosuv', 'categorytotrack');
+
+    $category = $DB->get_record('course_categories', array('idnumber' => $categoryidnumber), '*', MUST_EXIST);
+    $categorycontext = context_coursecat::instance($category->id);
+
+    if (!has_capability('local/plantalentosuv:viewreport', $categorycontext)) {
         return false;
     }
 
@@ -99,8 +108,9 @@ function local_plantalentosuv_pluginfile($course, $cm, $context, $filearea, $arg
     // Retrieve the file from the Files API.
     $fs = get_file_storage();
     $file = $fs->get_file($context->id, 'local_plantalentosuv', $filearea, $itemid, $filepath, $filename);
+
     if (!$file) {
-        return false; // The file does not exist.
+        return false;
     }
 
     send_stored_file($file, 0, 0, $forcedownload, $options);
