@@ -25,6 +25,7 @@
 namespace local_plantalentosuv;
 
 use mod_attendance_summary;
+use local_plantalentosuv\utils;
 
 defined('MOODLE_INTERNAL') || die;
 
