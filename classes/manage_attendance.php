@@ -25,6 +25,7 @@
 namespace local_plantalentosuv;
 
 use mod_attendance_summary;
+use local_plantalentosuv\utils;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -55,111 +56,97 @@ class manage_attendance {
 
         foreach ($usersids as $userid) {
 
-            $usercourses = enrol_get_users_courses($userid);
+            $moodleuser = $DB->get_record('user', array('id' => $userid));
 
-            // Get user data.
-            $sqlquery = "SELECT DISTINCT u.id, u.username, u.lastname, u.firstname, u.email
-                        FROM {user} u
-                        WHERE id = ".$userid;
+            $userattendance = array();
+            $userattendance['userid'] = $userid;
+            $userattendance['username'] = $moodleuser->username;
+            $userattendance['lastname'] = $moodleuser->lastname;
+            $userattendance['firstname'] = $moodleuser->firstname;
+            $userattendance['email'] = $moodleuser->email;
+            $userattendance['courses'] = array();
 
-            $userdata = $DB->get_record_sql($sqlquery);
+            $sqlcoursesattendance = "SELECT DISTINCT c.id AS courseid,
+                                                     c.shortname AS courseshortname,
+                                                     c.fullname AS coursefullname
+                                     FROM {attendance_log} attlog
+                                          INNER JOIN {attendance_sessions} attses ON attlog.sessionid = attses.id
+                                          INNER JOIN {attendance} att ON att.id = attses.attendanceid
+                                          INNER JOIN {course} c ON c.id = att.course
+                                     WHERE studentid = ?";
 
-            if (!empty($usercourses)) {
+            $coursesattendance = $DB->get_records_sql($sqlcoursesattendance, array($userid));
 
-                list($csql, $uparams) = $DB->get_in_or_equal(array_keys($usercourses), SQL_PARAMS_NAMED, 'cid0');
+            foreach ($coursesattendance as $courseattendance) {
 
-                $sqlquery = "SELECT att.id as attid,
-                                    att.course as courseid,
-                                    course.fullname as coursefullname,
-                                    course.shortname as courseshortname,
-                                    course.startdate as coursestartdate,
-                                    att.name as attname,
-                                    att.grade as attgrade
-                            FROM {attendance} att
-                            JOIN {course} course
-                                ON att.course = course.id
-                            WHERE att.course $csql
-                            ORDER BY coursefullname ASC, attname ASC";
+                $course = array();
+                $course['courseid'] = $courseattendance->courseid;
+                $course['courseshortname'] = $courseattendance->courseshortname;
+                $course['coursefullname'] = $courseattendance->coursefullname;
+                $course['attendance'] = array();
 
-                $params = array_merge($uparams, array('uid' => $userid));
+                $sqllogsstudent = "SELECT DISTINCT attlog.id AS logid,
+                                          att.id AS attendanceid,
+                                          att.name AS attendancename,
+                                          attses.id AS sessionid,
+                                          attses.description AS sessiondescription,
+                                          attses.sessdate AS sessiondate,
+                                          attlog.statusid AS statusid,
+                                          attses.duration AS sessduration
+                                   FROM {attendance_log} attlog
+                                        INNER JOIN {attendance_sessions} attses ON attlog.sessionid = attses.id
+                                        INNER JOIN {attendance} att ON att.id = attses.attendanceid
+                                   WHERE att.course = ?
+                                        AND attlog.studentid = ?
+                                        AND attses.lasttaken > 0";
 
-                $courseattendanceactivities = $DB->get_records_sql($sqlquery, $params);
+                $logsstudent = $DB->get_records_sql($sqllogsstudent, array($courseattendance->courseid, $userid));
 
-                $userattendance = array();
-                $userattendance['userid'] = $userid;
-                $userattendance['username'] = $userdata->username;
-                $userattendance['lastname'] = $userdata->lastname;
-                $userattendance['firstname'] = $userdata->firstname;
-                $userattendance['email'] = $userdata->email;
-                $userattendance['courses'] = array();
+                $course['attendance']['fullsessionslog'] = array();
+                $course['attendance']['takensessionssumary'] = array();
 
-                foreach ($courseattendanceactivities as $attendanceactivity) {
-                    if (!empty($attendanceactivity)) {
+                $studentgrade = 0;
 
-                        $summary = new mod_attendance_summary($attendanceactivity->attid, $userid);
+                foreach ($logsstudent as $logstudent) {
+                    $log = array();
+                    $log['sessionid'] = $logstudent->sessionid;
+                    $log['timestamp'] = $logstudent->sessiondate;
+                    $log['description'] = $logstudent->sessiondescription;
+                    $log['statusid'] = $logstudent->statusid;
+                    $log['duration'] = $logstudent->sessduration;
 
-                        // Data for student sessions report.
-                        $cm = get_coursemodule_from_instance('attendance', $attendanceactivity->attid, 0, false, MUST_EXIST);
-                        $attendance = $DB->get_record('attendance', array('id' => $attendanceactivity->attid), '*', MUST_EXIST);
-                        $courserecord = $DB->get_record('course', array('id' => $attendanceactivity->courseid), '*', MUST_EXIST);
-                        $context = \context_module::instance($cm->id);
+                    $statuses = $DB->get_record('attendance_statuses',
+                                                array('id' => $logstudent->statusid));
 
-                        $pageparams = new \mod_attendance_view_page_params();
+                    $studentgrade += intval($statuses->grade);
 
-                        $pageparams->edit = -1;
-                        $pageparams->studentid = $userid;
-                        $pageparams->mode = 2;
-                        $pageparams->view = 5;
-                        $pageparams->curdate = $courserecord->startdate;
-                        $pageparams->groupby = null;
-                        $pageparams->sesscourses = null;
+                    $log['statusacronym'] = $statuses->acronym;
+                    $log['statusdescription'] = $statuses->description;
 
-                        $pageparams->init($cm);
-
-                        $att = new \mod_attendance_structure($attendance, $cm, $courserecord, $context, $pageparams);
-
-                        $statuses = $att->get_statuses();
-                        $fullsessionlogsraw = $att->get_user_filtered_sessions_log_extended($userid);
-                        $fullsessionlogs = array();
-
-                        foreach ($fullsessionlogsraw as $sessionlograw) {
-
-                            // Only sessions taken are added.
-                            if ($sessionlograw->statusid) {
-                                $sessionlog = array();
-                                $sessionlog['sessionid'] = $sessionlograw->id;
-                                $sessionlog['timestamp'] = $sessionlograw->sessdate;
-                                $sessionlog['description'] = $sessionlograw->description;
-                                $sessionlog['statusid'] = $sessionlograw->statusid;
-                                $sessionlog['statusacronym'] = $statuses[$sessionlograw->statusid]->acronym;
-                                $sessionlog['statusdescription'] = $statuses[$sessionlograw->statusid]->description;
-                                $sessionlog['duration'] = $sessionlograw->duration;
-
-                                array_push($fullsessionlogs, $sessionlog);
-                            }
-                        }
-
-                        $courseinfo = array();
-                        $courseinfo['courseid'] = $attendanceactivity->courseid;
-                        $courseinfo['courseshortname'] = $attendanceactivity->courseshortname;
-                        $courseinfo['coursefullname'] = $attendanceactivity->coursefullname;
-                        $courseinfo['attendance'] = array();
-                        $courseinfo['attendance']['attendanceid'] = $attendanceactivity->attid;
-                        $courseinfo['attendance']['attendancename'] = $attendanceactivity->attname;
-                        $courseinfo['attendance']['takensessionssumary'] = $summary->get_taken_sessions_summary_for($userid);
-                        $courseinfo['attendance']['fullsessionslog'] = $fullsessionlogs;
-                    }
-
-                    array_push(
-                        $userattendance['courses'],
-                        $courseinfo);
+                    array_push($course['attendance']['fullsessionslog'], $log);
                 }
+
+                $course['attendance']['attendanceid'] = $logstudent->attendanceid;
+                $course['attendance']['attendancename'] = $logstudent->attendancename;
+
+                // Taken sessions summary.
+
+                $course['attendance']['takensessionssumary']['numtakensessions'] = count($logsstudent);
+                $course['attendance']['takensessionssumary']['takensessionspoints'] = $studentgrade;
+
+                $sqlmaxgrade = "SELECT MAX(grade) AS maxgrade
+                                FROM {attendance_statuses}
+                                WHERE attendanceid = ?";
+
+                $maxgrade = $DB->get_record_sql($sqlmaxgrade, array($logstudent->attendanceid))->maxgrade;
+
+                $course['attendance']['takensessionssumary']['takensessionsmaxpoints'] = count($logsstudent) * intval($maxgrade);
+                $course['attendance']['takensessionssumary']['takensessionspercentage'] = $studentgrade / (count($logsstudent) * intval($maxgrade));
+
+                array_push($userattendance['courses'], $course);
             }
 
-            if (!in_array($userattendance['userid'], $usersinarray)) {
-                array_push($userattendances, $userattendance);
-                array_push($usersinarray, $userattendance['userid']);
-            }
+            array_push($userattendances, $userattendance);
         }
 
         return $userattendances;
@@ -262,6 +249,21 @@ class manage_attendance {
                         $session['lasttakenby'] = $sessioninfo->lasttakenby;
 
                         array_push($sessionsreport['sessions'], $session);
+                    }
+
+                    // Get professor.
+                    $utils = new utils();
+                    $professors = $utils->get_users_with_specific_role($courserecord->id, 'professor');
+
+                    $sessionsreport['professors'] = array();
+
+                    foreach ($professors as $professor) {
+                        $professortoreturn = array();
+                        $professortoreturn['username'] = $professor->username;
+                        $professortoreturn['lastname'] = $professor->lastname;
+                        $professortoreturn['firstname'] = $professor->firstname;
+
+                        array_push($sessionsreport['professors'], $professortoreturn);
                     }
 
                     array_push($coursessessionsreport, $sessionsreport);
